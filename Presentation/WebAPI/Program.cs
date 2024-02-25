@@ -19,6 +19,9 @@ builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.ConfigurePersistenceDependencies();
 
+// CQRS registration to IoC  (Commands & Queries Handlers)
+builder.Services.AddCQRSServices();
+
 // LoggerService : Nlog
 builder.Services.ConfigureLoggerService();
 LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
