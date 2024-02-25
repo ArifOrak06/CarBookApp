@@ -4,7 +4,7 @@ using Application.Repositories;
 using Domain.Entities;
 using Domain.Exceptions;
 
-namespace Application.Features.CQRS.Handlers
+namespace Application.Features.CQRS.Handlers.AboutHandlers
 {
     public class GetOneAboutByIdQueryHandler
     {
