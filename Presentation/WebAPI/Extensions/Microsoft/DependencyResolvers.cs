@@ -1,4 +1,5 @@
-﻿using Application.Services.Logging;
+﻿using Application.Features.CQRS.Handlers.AboutHandlers;
+using Application.Services.Logging;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using System.Reflection;
@@ -20,6 +21,15 @@ namespace WebAPI.Extensions.Microsoft
         public static void ConfigureLoggerService(this IServiceCollection services)
         {
             services.AddSingleton<ILoggerService, LoggerService>();
+        }
+        public static void AddCQRSServices(this IServiceCollection services)
+        {
+            services.AddScoped<CreateOneAboutCommandHandler>();
+            services.AddScoped<RemoveOneAboutCommandHandler>();
+            services.AddScoped<UpdateOneAboutCommandHandler>();
+            services.AddScoped<GetOneAboutByIdQueryHandler>();
+            services.AddScoped<GetAllAboutsQueryHandler>();
+
         }
 
     }
