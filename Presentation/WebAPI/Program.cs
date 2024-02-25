@@ -1,6 +1,8 @@
 using WebAPI.Extensions.Microsoft;
 using Persistence.Extensions.Microsoft;
 using NLog;
+using Application.Services.Logging;
+using WebAPI.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -25,7 +27,9 @@ LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nl
 
 
 var app = builder.Build();
+var logger = app.Services.GetRequiredService<ILoggerService>();
 
+app.ConfigureExceptionHandler(logger);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

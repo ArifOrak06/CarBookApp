@@ -2,7 +2,7 @@
 using Application.Repositories;
 using Domain.Entities;
 
-namespace Application.Features.CQRS.Handlers
+namespace Application.Features.CQRS.Handlers.AboutHandlers
 {
     public class GetAllAboutsQueryHandler
     {
@@ -18,7 +18,7 @@ namespace Application.Features.CQRS.Handlers
             var results = await _repository.GetAllAsync(false);
             if (!results.Any())
                 throw new Exception("Listeleme yapılacak About metni bulunmamaktadır.");
-            
+
             return results.Select(x => new GetAllAboutsQueryResult
             {
                 Description = x.Description,
@@ -26,7 +26,7 @@ namespace Application.Features.CQRS.Handlers
                 ImageUrl = x.ImageUrl,
                 Title = x.Title
             }).ToList();
-            
+
         }
     }
 }
