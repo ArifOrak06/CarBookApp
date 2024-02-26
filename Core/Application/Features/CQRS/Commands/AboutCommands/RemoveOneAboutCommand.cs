@@ -1,4 +1,4 @@
-﻿namespace Application.Features.CQRS.Commands
+﻿namespace Application.Features.CQRS.Commands.AboutCommands
 {
     public class RemoveOneAboutCommand
     {

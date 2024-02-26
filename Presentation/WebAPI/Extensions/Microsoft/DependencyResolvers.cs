@@ -1,5 +1,7 @@
 ﻿using Application.Features.CQRS.Handlers.AboutHandlers;
+using Application.Features.CQRS.Handlers.BannerHandlers;
 using Application.Services.Logging;
+using Application.Utilities.AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using System.Reflection;
@@ -30,6 +32,17 @@ namespace WebAPI.Extensions.Microsoft
             services.AddScoped<GetOneAboutByIdQueryHandler>();
             services.AddScoped<GetAllAboutsQueryHandler>();
 
+      
+            services.AddScoped<GetOneBannerByIdQueryHandler>();
+            services.AddScoped<CreateOneBannerCommandHandler>();
+            services.AddScoped<UpdateOneBannerCommandHandler>();
+            services.AddScoped<RemoveOneBannerCommandHandler>();
+
+        }
+        public static void ConfigureAutoMapper(this IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(BannerProfile));
+                
         }
 
     }

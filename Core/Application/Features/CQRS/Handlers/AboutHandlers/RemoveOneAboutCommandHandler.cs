@@ -1,4 +1,4 @@
-﻿using Application.Features.CQRS.Commands;
+﻿using Application.Features.CQRS.Commands.AboutCommands;
 using Application.Repositories;
 using Application.UnitOfWorks;
 using Domain.Entities;

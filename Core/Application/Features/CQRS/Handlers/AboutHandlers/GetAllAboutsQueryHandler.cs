@@ -1,4 +1,4 @@
-﻿using Application.Features.CQRS.Results;
+﻿using Application.Features.CQRS.Results.AboutResults;
 using Application.Repositories;
 using Domain.Entities;
 
