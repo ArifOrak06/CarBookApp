@@ -3,6 +3,7 @@ using Persistence.Extensions.Microsoft;
 using NLog;
 using Application.Services.Logging;
 using WebAPI.Extensions;
+using Application.Features.CQRS.Handlers.BannerHandlers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,11 +23,15 @@ builder.Services.ConfigurePersistenceDependencies();
 // CQRS registration to IoC  (Commands & Queries Handlers)
 builder.Services.AddCQRSServices();
 
+builder.Services.AddScoped<GetAllBannersQueryHandler>();
+
 // LoggerService : Nlog
 builder.Services.ConfigureLoggerService();
 LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
+//AutoMapper
 
+builder.Services.ConfigureAutoMapper();
 
 
 var app = builder.Build();

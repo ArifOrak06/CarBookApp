@@ -1,5 +1,6 @@
 ﻿using Application.Features.CQRS.Commands;
-using Application.Features.CQRS.Results;
+using Application.Features.CQRS.Commands.AboutCommands;
+using Application.Features.CQRS.Results.AboutResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
 using Domain.Entities;

@@ -1,4 +1,4 @@
-﻿namespace Application.Features.CQRS.Results
+﻿namespace Application.Features.CQRS.Results.AboutResults
 {
     public class CreateOneAboutCommandResult
     {
