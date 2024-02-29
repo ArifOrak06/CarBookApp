@@ -1,7 +1,7 @@
 ﻿using Application.Features.CQRS.Commands.BannerCommands;
 using Application.Features.CQRS.Handlers.BannerHandlers;
 using Application.Features.CQRS.Queries.BannerQueries;
-using Domain.Exceptions.ExceptionForBanner;
+using Domain.Exceptions.ExceptionsForBanner;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

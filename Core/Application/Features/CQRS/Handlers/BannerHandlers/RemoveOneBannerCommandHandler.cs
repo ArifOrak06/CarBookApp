@@ -2,7 +2,7 @@
 using Application.Repositories;
 using Application.UnitOfWorks;
 using Domain.Entities;
-using Domain.Exceptions.ExceptionForBanner;
+using Domain.Exceptions.ExceptionsForBanner;
 
 namespace Application.Features.CQRS.Handlers.BannerHandlers
 {

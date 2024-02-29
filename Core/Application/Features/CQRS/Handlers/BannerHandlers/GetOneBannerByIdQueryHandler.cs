@@ -3,7 +3,7 @@ using Application.Features.CQRS.Results.BannerResults;
 using Application.Repositories;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Exceptions.ExceptionForBanner;
+using Domain.Exceptions.ExceptionsForBanner;
 
 namespace Application.Features.CQRS.Handlers.BannerHandlers
 {

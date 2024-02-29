@@ -1,4 +1,4 @@
-﻿namespace Domain.Exceptions.ExceptionForBanner
+﻿namespace Domain.Exceptions.ExceptionsForBanner
 {
     public sealed class BannerObjectNullBadRequestException : BadRequestException
     {

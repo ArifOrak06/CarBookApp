@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
         public int CarId { get; set; }
-        public Car Car { get; set; } = new();
+        public Car Car { get; set; }
         public int PricingId { get; set; }
-        public Pricing Pricing { get; set; } = new();
+        public Pricing Pricing { get; set; }
         public decimal Amount { get; set; }
     }
 }
