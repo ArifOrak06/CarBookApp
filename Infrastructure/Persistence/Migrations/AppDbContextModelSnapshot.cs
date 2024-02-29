@@ -35,6 +35,7 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -55,6 +56,7 @@ namespace Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -62,9 +64,11 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VideoDescription")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VideoUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -98,31 +102,35 @@ namespace Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BigImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<string>("CoverImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Fuel")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Km")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Luggage")
-                        .HasColumnType("tinyint");
+                    b.Property<int>("Luggage")
+                        .HasColumnType("int");
 
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Seat")
-                        .HasColumnType("tinyint");
+                    b.Property<int>("Seat")
+                        .HasColumnType("int");
 
                     b.Property<string>("Transmission")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -130,6 +138,34 @@ namespace Persistence.Migrations
                     b.HasIndex("BrandId");
 
                     b.ToTable("Cars");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BigImageUrl = "asdasdasd",
+                            BrandId = 1,
+                            CoverImageUrl = "asdasdasd",
+                            Fuel = "asdasdasd",
+                            Km = 44,
+                            Luggage = 25,
+                            Model = "asdasdasd",
+                            Seat = 42,
+                            Transmission = "asdasdasdad"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BigImageUrl = "astra",
+                            BrandId = 1,
+                            CoverImageUrl = "asdasdasd",
+                            Fuel = "asdasdasd",
+                            Km = 15,
+                            Luggage = 65,
+                            Model = "asdasdasd",
+                            Seat = 52,
+                            Transmission = "asdasdasdad"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.CarDescription", b =>
@@ -396,6 +432,7 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
