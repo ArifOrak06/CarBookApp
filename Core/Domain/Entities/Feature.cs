@@ -1,8 +1,9 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities.Abstracts;
+
+namespace Domain.Entities
 {
-    public class Feature
+    public class Feature : BaseEntity, IEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; } 
         public List<CarFeature> CarFeeatures { get; set; } 
     }

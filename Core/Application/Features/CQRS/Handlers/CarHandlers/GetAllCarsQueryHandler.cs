@@ -7,18 +7,19 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
 {
     public class GetAllCarsQueryHandler
     {
-        private readonly IRepository<Car> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
 
-        public GetAllCarsQueryHandler(IRepository<Car> repository, IMapper mapper)
+        public GetAllCarsQueryHandler(IMapper mapper, IRepositoryManager repositoryManager)
         {
-            _repository = repository;
+
             _mapper = mapper;
+            _repositoryManager = repositoryManager;
         }
 
         public async Task<List<GetAllCarsQueryResult>> Handle()
         {
-            var results = await _repository.GetAllAsync(false);
+            var results = await _repositoryManager.CarRepository.GetAllAsync(false);
             if (results is null)
                 throw new Exception("Sistemde kayıtlı Car valrığı bulunmaması nedeniyle listeleme işlemi başarısız.!");
 

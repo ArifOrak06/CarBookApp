@@ -1,11 +1,12 @@
 ﻿using Application.Repositories;
+using Domain.Entities.Abstracts;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using System.Linq.Expressions;
 
 namespace Persistence.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class,IEntity,new()
     {
         protected readonly AppDbContext _context;
 

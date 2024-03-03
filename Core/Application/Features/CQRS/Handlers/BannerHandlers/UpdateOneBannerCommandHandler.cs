@@ -10,13 +10,13 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
     public class UpdateOneBannerCommandHandler
     {
-        private readonly IRepository<Banner> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateOneBannerCommandHandler(IRepository<Banner> repository, IMapper mapper, IUnitOfWork unitOfWork)
+        public UpdateOneBannerCommandHandler(IRepositoryManager repositoryManager, IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -25,12 +25,12 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
         {
             if (updateOneBannerCommand == null)
                 throw new BannerObjectNullBadRequestException();
-            var currentEntity = _repository.GetByFilter(x => x.Id == updateOneBannerCommand.Id, true).SingleOrDefault();
+            var currentEntity = _repositoryManager.BannerRepository.GetByFilter(x => x.Id == updateOneBannerCommand.Id, true).SingleOrDefault();
             if (currentEntity == null)
                 throw new BannerNotFoundException(updateOneBannerCommand.Id);
 
-            _repository.Update(_mapper.Map<Banner>(updateOneBannerCommand));
-            _unitOfWork.CommitAsync();
+            _repositoryManager.BannerRepository.Update(_mapper.Map<Banner>(updateOneBannerCommand));
+            await _unitOfWork.CommitAsync();
             return _mapper.Map<UpdateOneBannerCommandResult>(currentEntity);
 
         }

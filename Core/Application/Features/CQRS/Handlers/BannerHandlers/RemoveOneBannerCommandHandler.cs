@@ -8,22 +8,22 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
     public class RemoveOneBannerCommandHandler
     {
-        private readonly IRepository<Banner> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RemoveOneBannerCommandHandler(IRepository<Banner> repository, IUnitOfWork unitOfWork)
+        public RemoveOneBannerCommandHandler(IRepositoryManager repositoryManager, IUnitOfWork unitOfWork)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
             _unitOfWork = unitOfWork;
         }
 
 
         public async Task Handle(RemoveOneBannerCommand removeOneBannerCommand)
         {
-            var currentEntity = _repository.GetByFilter(x => x.Id == removeOneBannerCommand.Id, true).SingleOrDefault();
+            var currentEntity = _repositoryManager.BannerRepository.GetByFilter(x => x.Id == removeOneBannerCommand.Id, true).SingleOrDefault();
             if (currentEntity != null)
                 throw new BannerNotFoundException(removeOneBannerCommand.Id);
-            _repository.Delete(currentEntity);
+            _repositoryManager.BannerRepository.Delete(currentEntity);
             await _unitOfWork.CommitAsync();
 
 

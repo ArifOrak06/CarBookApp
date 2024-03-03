@@ -2,27 +2,29 @@
 using Application.Features.CQRS.Results.AboutResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
-using Domain.Entities;
+using AutoMapper;
 using Domain.Exceptions;
 
 namespace Application.Features.CQRS.Handlers.AboutHandlers
 {
     public class UpdateOneAboutCommandHandler
     {
-        private readonly IRepository<About> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UpdateOneAboutCommandHandler(IRepository<About> repository, IUnitOfWork unitOfWork)
+        public UpdateOneAboutCommandHandler(IRepositoryManager repositoryManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<UpdateOneAboutCommandResult> Handle(UpdateOneAboutCommand updateOneAboutCommand)
         {
             if (updateOneAboutCommand == null)
                 throw new AboutObjextNullBadRequestException();
-            var result = _repository.GetByFilter(x => x.Id.Equals(updateOneAboutCommand.Id),true).SingleOrDefault();
+            var result = _repositoryManager.AboutRepository.GetByFilter(x => x.Id.Equals(updateOneAboutCommand.Id),true).SingleOrDefault();
             if (result is null)
                 throw new AboutNotFoundException(updateOneAboutCommand.Id);
 
@@ -31,11 +33,7 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
             if(updateOneAboutCommand.ImageUrl != null)
                 result.ImageUrl = updateOneAboutCommand.ImageUrl;
             await _unitOfWork.CommitAsync();
-            return new UpdateOneAboutCommandResult
-            {
-                Id = result.Id,
-                Title = result.Title,
-            };
+            return _mapper.Map<UpdateOneAboutCommandResult>(result);
 
         }
     }

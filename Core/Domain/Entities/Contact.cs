@@ -1,8 +1,9 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities.Abstracts;
+
+namespace Domain.Entities
 {
-    public class Contact
+    public class Contact : BaseEntity, IEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; } 
         public string Email { get; set; } 
         public string Subject { get; set; } 

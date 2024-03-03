@@ -10,15 +10,16 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
     public class CreateOneBannerCommandHandler 
     {
-        private readonly IRepository<Banner> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CreateOneBannerCommandHandler(IRepository<Banner> repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public CreateOneBannerCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IRepositoryManager repositoryManager)
         {
-            _repository = repository;
+
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _repositoryManager = repositoryManager;
         }
 
         public async Task<CreateOneBannerCommandResult> Handle(CreateOneBannerCommand createOneBannerCommand)
@@ -26,7 +27,7 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
             if (createOneBannerCommand == null)
                 throw new BannerObjectNullBadRequestException();
             var newBanner = _mapper.Map<Banner>(createOneBannerCommand);
-            var result = await _repository.CreateAsync(newBanner);
+            var result = await _repositoryManager.BannerRepository.CreateAsync(newBanner);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<CreateOneBannerCommandResult>(newBanner);
         }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class BrandsController : ControllerBase
     {
@@ -14,14 +14,16 @@ namespace WebAPI.Controllers
         private readonly CreateOneBrandCommandHandler _createOneBrandCommandHandler;
         private readonly UpdateOneBrandCommandHandler _updateOneBrandCommandHandler;
         private readonly RemoveOneBrandCommandHandler _removeOneBrandCommandHandler;
+        private readonly GetOneBrandByIdWithCarsQueryHandler _getOneBrandByIdWithCarsQueryHandler;
 
-        public BrandsController(GetOneBrandByIdQueryHandler getOneBrandByIdQueryHandler, GetAllBrandsQueryHandler getAllBrandsQueryHandler, CreateOneBrandCommandHandler createOneBrandCommandHandler, UpdateOneBrandCommandHandler updateOneBrandCommandHandler, RemoveOneBrandCommandHandler removeOneBrandCommandHandler)
+        public BrandsController(GetOneBrandByIdQueryHandler getOneBrandByIdQueryHandler, GetAllBrandsQueryHandler getAllBrandsQueryHandler, CreateOneBrandCommandHandler createOneBrandCommandHandler, UpdateOneBrandCommandHandler updateOneBrandCommandHandler, RemoveOneBrandCommandHandler removeOneBrandCommandHandler, GetOneBrandByIdWithCarsQueryHandler getOneBrandByIdWithCarsQueryHandler)
         {
             _getOneBrandByIdQueryHandler = getOneBrandByIdQueryHandler;
             _getAllBrandsQueryHandler = getAllBrandsQueryHandler;
             _createOneBrandCommandHandler = createOneBrandCommandHandler;
             _updateOneBrandCommandHandler = updateOneBrandCommandHandler;
             _removeOneBrandCommandHandler = removeOneBrandCommandHandler;
+            _getOneBrandByIdWithCarsQueryHandler = getOneBrandByIdWithCarsQueryHandler;
         }
 
         [HttpGet("{id:int}")]
@@ -55,5 +57,12 @@ namespace WebAPI.Controllers
             return StatusCode(201, result);
 
         }
+        [HttpGet("{brandId:int}")]
+        public async Task<IActionResult> GetOneBrandWithCars([FromRoute(Name="brandId")]int brandId)
+        {
+            var result = await _getOneBrandByIdWithCarsQueryHandler.Handle(new GetOneBrandByIdWithCarsQuery(brandId));
+            return StatusCode(200, result);
+        }
+        
     }
 }
