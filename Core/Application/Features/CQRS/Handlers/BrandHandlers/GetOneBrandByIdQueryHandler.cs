@@ -2,25 +2,24 @@
 using Application.Features.CQRS.Results.BrandResults;
 using Application.Repositories;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Exceptions.ExceptionsForBrand;
 
 namespace Application.Features.CQRS.Handlers.BrandHandlers
 {
     public class GetOneBrandByIdQueryHandler
     {
-        private readonly IRepository<Brand> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
 
-        public GetOneBrandByIdQueryHandler(IRepository<Brand> repository, IMapper mapper)
+        public GetOneBrandByIdQueryHandler(IRepositoryManager repositoryManager,IMapper mapper)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
             _mapper = mapper;
         }
 
         public GetOneBrandByIdQueryResult Handle(GetOneBrandByIdQuery getOneBrandByIdQuery)
         {
-            var currentEntity = _repository.GetByFilter(x => x.Id.Equals(getOneBrandByIdQuery.Id), false).SingleOrDefault();
+            var currentEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(getOneBrandByIdQuery.Id), false).SingleOrDefault();
             if (currentEntity == null)
                 throw new BrandNotFoundException(getOneBrandByIdQuery.Id);
             return _mapper.Map<GetOneBrandByIdQueryResult>(currentEntity);

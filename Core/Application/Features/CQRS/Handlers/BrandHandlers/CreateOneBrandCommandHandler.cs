@@ -11,13 +11,14 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
 {
     public class CreateOneBrandCommandHandler
     {
-        private readonly IRepository<Brand> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateOneBrandCommandHandler(IRepository<Brand> repository, IMapper mapper, IUnitOfWork unitOfWork)
+        public CreateOneBrandCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IRepositoryManager repositoryManager)
         {
-            _repository = repository;
+
+            _repositoryManager = repositoryManager;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -28,7 +29,7 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
                 throw new BrandObjectNullBadRequestException();
 
             var newEntity = _mapper.Map<Brand>(createOneBrandCommand);
-            await _repository.CreateAsync(newEntity);
+            await _repositoryManager.BrandRepository.CreateAsync(newEntity);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<GetOneBrandByIdQueryResult>(newEntity);
         }

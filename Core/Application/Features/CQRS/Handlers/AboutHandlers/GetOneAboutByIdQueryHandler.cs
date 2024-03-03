@@ -1,6 +1,7 @@
 ﻿using Application.Features.CQRS.Queries.AboutQueries;
 using Application.Features.CQRS.Results.AboutResults;
 using Application.Repositories;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
 
@@ -8,26 +9,22 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
 {
     public class GetOneAboutByIdQueryHandler
     {
-        private readonly IRepository<About> _repository;
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
 
-        public GetOneAboutByIdQueryHandler(IRepository<About> repository)
+        public GetOneAboutByIdQueryHandler(IRepositoryManager repositoryManager, IMapper mapper)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
+            _mapper = mapper;
         }
 
         public GetOneAboutByIdQueryResult Handle(GetOneAboutByIdQuery getOneAboutByIdQuery)
         {
-            var newAbout = _repository.GetByFilter(x => x.Id == getOneAboutByIdQuery.Id, false).SingleOrDefault();
+            var newAbout = _repositoryManager.AboutRepository.GetByFilter(x => x.Id == getOneAboutByIdQuery.Id, false).SingleOrDefault();
             if (newAbout == null)
                 throw new AboutNotFoundException(getOneAboutByIdQuery.Id);
 
-            return new GetOneAboutByIdQueryResult
-            {
-                Id = newAbout.Id,
-                Description = newAbout.Description,
-                ImageUrl = newAbout.ImageUrl,
-                Title = newAbout.Title
-            };
+            return _mapper.Map<GetOneAboutByIdQueryResult>(newAbout);
         }
     }
 }

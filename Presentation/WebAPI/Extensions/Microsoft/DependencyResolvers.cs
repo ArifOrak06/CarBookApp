@@ -47,13 +47,16 @@ namespace WebAPI.Extensions.Microsoft
             services.AddScoped<CreateOneBrandCommandHandler>();
             services.AddScoped<UpdateOneBrandCommandHandler>();
             services.AddScoped<RemoveOneBrandCommandHandler>();
-
+            services.AddScoped<GetOneBrandByIdWithCarsQueryHandler>();
             //Car
             services.AddScoped<GetOneCarByIdQueryHandler>();
             services.AddScoped<GetAllCarsQueryHandler>();
             services.AddScoped<CreateOneCarCommandHandler>();
             services.AddScoped<UpdateOneCarCommandHandler>();
             services.AddScoped<RemoveOneCarCommandHandler>();
+            services.AddScoped<GetOneCarByIdWithBrandQueryHandler>();
+            services.AddScoped<GetAllCarsWithBrandsQueryHandler>();
+          
         
 
         }

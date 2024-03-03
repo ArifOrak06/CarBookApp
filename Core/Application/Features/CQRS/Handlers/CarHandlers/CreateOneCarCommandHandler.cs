@@ -10,15 +10,15 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
 {
     public class CreateOneCarCommandHandler
     {
-        private readonly IRepository<Car> _repository;
+        private readonly IRepositoryManager _repositoryManger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CreateOneCarCommandHandler(IRepository<Car> repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public CreateOneCarCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IRepositoryManager repositoryManger)
         {
-            _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _repositoryManger = repositoryManger;
         }
 
         public async Task<CreateOneCarCommandResult> Handle(CreateOneCarCommand createOneCarCommand)
@@ -26,7 +26,7 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
             if (createOneCarCommand == null)
                 throw new CarObjectNullBadRequestException();
             var newCar = _mapper.Map<Car>(createOneCarCommand);
-            await _repository.CreateAsync(newCar);
+            await _repositoryManger.CarRepository.CreateAsync(newCar);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<CreateOneCarCommandResult>(newCar);
         }

@@ -1,8 +1,10 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities.Abstracts;
+
+namespace Domain.Entities
 {
-    public class About
+    public class About : BaseEntity,IEntity
     {
-        public int Id { get; set; }
+
         public string Title { get; set; } 
         public string Description { get; set; } 
         public string ImageUrl { get; set; }

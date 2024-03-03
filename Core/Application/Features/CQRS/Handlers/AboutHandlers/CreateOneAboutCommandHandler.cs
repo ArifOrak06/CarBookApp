@@ -1,5 +1,4 @@
 ﻿using Application.Features.CQRS.Commands;
-using Application.Features.CQRS.Commands.AboutCommands;
 using Application.Features.CQRS.Results.AboutResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
@@ -10,23 +9,26 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
 {
     public class CreateOneAboutCommandHandler
     {
-        private readonly IRepository<About> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateOneAboutCommandHandler(IRepository<About> repository)
+        public CreateOneAboutCommandHandler(IRepositoryManager repositoryManager)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
         }
 
         public async Task<CreateOneAboutCommandResult> Handle(CreateOneAboutCommand createOneAboutCommand)
         {
             if(createOneAboutCommand is null)
                 throw new AboutObjextNullBadRequestException();
-            var createdAbout = await _repository.CreateAsync(new About
+            var createdAbout = await _repositoryManager.AboutRepository.CreateAsync(new About
             {
                 Title = createOneAboutCommand.Title,
                 Description = createOneAboutCommand.Description,
                 ImageUrl = createOneAboutCommand.ImageUrl,
+                CreatedDate = DateTime.UtcNow,
+                IsActive = true,
+                IsDeleted = false
             });
             await _unitOfWork.CommitAsync();
 
@@ -34,6 +36,7 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
             {
                 Id = createdAbout.Id,
                 Title = createdAbout.Title,
+                
             };
             
 

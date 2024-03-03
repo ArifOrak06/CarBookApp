@@ -1,23 +1,23 @@
 ﻿using Application.Features.CQRS.Results.BannerResults;
 using Application.Repositories;
 using AutoMapper;
-using Domain.Entities;
 
 namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
     public class GetAllBannersQueryHandler
     {
-        private readonly IRepository<Banner> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
-        public GetAllBannersQueryHandler(IRepository<Banner> repository, IMapper mapper)
+        public GetAllBannersQueryHandler(IMapper mapper, IRepositoryManager repositoryManager)
         {
-            _repository = repository;
+
             _mapper = mapper;
+            _repositoryManager = repositoryManager;
         }
 
         public async Task<List<GetAllBannersQueryResult>> Handle()
         {
-            var results = await _repository.GetAllAsync(false);
+            var results = await _repositoryManager.BannerRepository.GetAllAsync(false);
             if (!results.Any())
                 throw new Exception("Sistemde kayıtlı banner bulunmaması nedeniyle listeleme işlemi başarısız olarak gerçekleştirildi.");
 

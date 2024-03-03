@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities.Abstracts;
+
+namespace Domain.Entities
 {
-    public class CarFeature
+    public class CarFeature : IEntity
     {
         public int Id { get; set; }
         public bool Available { get; set; }

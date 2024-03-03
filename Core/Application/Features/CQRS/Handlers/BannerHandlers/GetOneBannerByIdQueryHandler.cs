@@ -9,17 +9,17 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
     public class GetOneBannerByIdQueryHandler
     {
-        private readonly IRepository<Banner> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
-        public GetOneBannerByIdQueryHandler(IRepository<Banner> repository, IMapper mapper)
+        public GetOneBannerByIdQueryHandler(IRepositoryManager repositoryManager, IMapper mapper)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
             _mapper = mapper;
         }
 
         public GetOneBannerByIdQueryResult Handle(GetOneBannerByIdQuery query)
         {
-            var result = _repository.GetByFilter(x => x.Id.Equals(query.Id), false).SingleOrDefault();
+            var result = _repositoryManager.BannerRepository.GetByFilter(x => x.Id.Equals(query.Id), false).SingleOrDefault();
             if (result is null)
                 throw new BannerNotFoundException(query.Id);
             //return new GetOneBannerByIdQueryResult

@@ -1,8 +1,10 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities.Abstracts;
+
+namespace Domain.Entities
 {
-    public class Car
+    public class Car : BaseEntity, IEntity
     {
-        public int Id { get; set; }
+
         public int BrandId { get; set; }
         public Brand Brand { get; set; } 
         public List<CarFeature> CarFeeatures { get; set; }

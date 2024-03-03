@@ -3,20 +3,19 @@ using Application.Features.CQRS.Results.BrandResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Exceptions.ExceptionsForBrand;
 
 namespace Application.Features.CQRS.Handlers.BrandHandlers
 {
     public class UpdateOneBrandCommandHandler
     {
-        private readonly IRepository<Brand> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UpdateOneBrandCommandHandler(IRepository<Brand> repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public UpdateOneBrandCommandHandler(IRepositoryManager repositoryManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -25,7 +24,7 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
         {
             if (updateOneBrandCommand is null)
                 throw new BrandObjectNullBadRequestException();
-            var unchangedEntity = _repository.GetByFilter(x => x.Id.Equals(updateOneBrandCommand.Id),true).SingleOrDefault();
+            var unchangedEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(updateOneBrandCommand.Id),true).SingleOrDefault();
             if (unchangedEntity is null)
                 throw new BrandNotFoundException(updateOneBrandCommand.Id);
             unchangedEntity.Id = updateOneBrandCommand.Id;

@@ -9,13 +9,13 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
 {
     public class RemoveOneBrandCommandHandler
     {
-        private readonly IRepository<Brand> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public RemoveOneBrandCommandHandler(IRepository<Brand> repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public RemoveOneBrandCommandHandler(IRepositoryManager repositoryManager,IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = repository;
+            _repositoryManager = repositoryManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -24,11 +24,11 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
         {
             if (removeOneBrandCommand is null)
                 throw new BrandObjectNullBadRequestException();
-            var currentEntity = _repository.GetByFilter(x => x.Id.Equals(removeOneBrandCommand.Id), true).SingleOrDefault();
+            var currentEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(removeOneBrandCommand.Id), true).SingleOrDefault();
             if (currentEntity is null)
                 throw new BrandNotFoundException(removeOneBrandCommand.Id);
 
-            _repository.Delete(currentEntity);
+            _repositoryManager.BrandRepository.Delete(currentEntity);
             await _unitOfWork.CommitAsync();
             return removeOneBrandCommand.Id;
 

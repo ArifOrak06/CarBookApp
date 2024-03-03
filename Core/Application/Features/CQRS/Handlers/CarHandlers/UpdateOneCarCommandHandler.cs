@@ -3,20 +3,20 @@ using Application.Features.CQRS.Results.CarResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Exceptions.ExceptionsForCar;
 
 namespace Application.Features.CQRS.Handlers.CarHandlers
 {
     public class UpdateOneCarCommandHandler
     {
-        private readonly IRepository<Car> _repository;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public UpdateOneCarCommandHandler(IRepository<Car> repository, IUnitOfWork unitOfWork, IMapper mapper)
+        public UpdateOneCarCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IRepositoryManager repositoryManager)
         {
-            _repository = repository;
+
+            _repositoryManager = repositoryManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -25,7 +25,7 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
         {
             if (updateOneCarCommand == null)
                 throw new CarObjectNullBadRequestException();
-            var unchangedEntity = _repository.GetByFilter(x => x.Id.Equals(updateOneCarCommand.Id), true).SingleOrDefault();
+            var unchangedEntity = _repositoryManager.CarRepository.GetByFilter(x => x.Id.Equals(updateOneCarCommand.Id), true).SingleOrDefault();
             if (unchangedEntity == null)
                 throw new CarNotFoundException(updateOneCarCommand.Id);
 

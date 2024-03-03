@@ -1,8 +1,9 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities.Abstracts;
+
+namespace Domain.Entities
 {
-    public class Testimonial
+    public class Testimonial : BaseEntity, IEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; } 
         public string Title { get; set; } 
         public string Comment { get; set; } 
