@@ -2,6 +2,9 @@
 using Application.Features.CQRS.Handlers.BannerHandlers;
 using Application.Features.CQRS.Handlers.BrandHandlers;
 using Application.Features.CQRS.Handlers.CarHandlers;
+using Application.Features.CQRS.Handlers.CategoryHandlers;
+using Application.Features.CQRS.Handlers.ContactHandlers;
+using Application.Features.CQRS.Handlers.FeatureHandlers;
 using Application.Services.Logging;
 using Application.Utilities.AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +59,29 @@ namespace WebAPI.Extensions.Microsoft
             services.AddScoped<RemoveOneCarCommandHandler>();
             services.AddScoped<GetOneCarByIdWithBrandQueryHandler>();
             services.AddScoped<GetAllCarsWithBrandsQueryHandler>();
-          
+            // Category
+            services.AddScoped<GetOneCategoryByIdQueryHandler>();
+            services.AddScoped<GetAllCategoriesQueryHandler>();
+            services.AddScoped<CreateOneCategoryCommandHandler>();
+            services.AddScoped<UpdateOneCategoryCommandHandler>();
+            services.AddScoped<RemoveOneCategoryCommandHandler>();
+            // Contact
+            services.AddScoped<GetOneContactByIdQueryHandler>();
+            services.AddScoped<GetAllContactsQueryHandler>();
+            services.AddScoped<CreateOneContactCommandHandler>();
+            services.AddScoped<UpdateOneContactCommandHandler>();
+            services.AddScoped<RemoveOneContactCommandHandler>();
+
+            // feature
+            //services.AddScoped<GetOneFeatureByIdQueryHandler>();
+            //services.AddScoped<GetAllFeaturesQueryHandler>();
+            //services.AddScoped<CreateOneFeatureCommandHandler>();
+            //services.AddScoped<UpdateOneFeatureCommandHandler>();
+            //services.AddScoped<RemoveOneFeatureCommandHandler>();
+
+           
+
+
         
 
         }
@@ -65,6 +90,6 @@ namespace WebAPI.Extensions.Microsoft
             services.AddAutoMapper(typeof(BannerProfile));
                 
         }
-
+        public static void RegistrationOfMediaTR(this IServiceCollection services) => services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CarProfile).Assembly));
     }
 }

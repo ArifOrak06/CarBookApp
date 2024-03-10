@@ -12,5 +12,6 @@
         public byte Seat { get; set; }
         public string Fuel { get; set; }
         public string BigImageUrl { get; set; }
+        public bool IsActive { get; set; }
     }
 }

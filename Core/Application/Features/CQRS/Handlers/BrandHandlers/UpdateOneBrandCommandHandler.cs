@@ -29,6 +29,10 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
                 throw new BrandNotFoundException(updateOneBrandCommand.Id);
             unchangedEntity.Id = updateOneBrandCommand.Id;
             unchangedEntity.Name = updateOneBrandCommand.Name;
+            unchangedEntity.ModifiedDate = DateTime.UtcNow;
+            unchangedEntity.IsActive = updateOneBrandCommand.IsActive;
+            if (updateOneBrandCommand.IsActive) unchangedEntity.IsDeleted = false; else unchangedEntity.IsDeleted = true;
+
             await _unitOfWork.CommitAsync();
             return _mapper.Map<GetOneBrandByIdQueryResult>(unchangedEntity);
         }

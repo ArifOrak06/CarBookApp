@@ -8,6 +8,12 @@
         IBannerRepository BannerRepository { get; }
         ICategoryRepository CategoryRepository { get; }
         IContactRepository ContactRepository { get; }
+        IFeatureRepository FeatureRepository { get; }
+        IFooterAdressRepository FooterAdressRepository { get; }
+        ILocationRepository LocationRepository { get; }
+        IPricingRepository PricingRepository { get; }
+        IProvidedServiceRepository ProvidedServiceRepository { get; }
+        ISocialMediaRepository SocialMediaRepository { get; }
 
     }
 }

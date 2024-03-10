@@ -38,6 +38,10 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
             unchangedEntity.Km = updateOneCarCommand.Km;
             unchangedEntity.Seat = updateOneCarCommand.Seat;
             unchangedEntity.Model = updateOneCarCommand.Model;
+            unchangedEntity.IsActive = updateOneCarCommand.IsActive;
+            unchangedEntity.ModifiedDate = DateTime.UtcNow;
+            if (updateOneCarCommand.IsActive) unchangedEntity.IsDeleted = false; else unchangedEntity.IsDeleted = true;
+
             await _unitOfWork.CommitAsync();
             return _mapper.Map<UpdateOneCarCommandResult>(unchangedEntity); 
         }
