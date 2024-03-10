@@ -33,7 +33,7 @@ namespace Application.Features.CQRS.Handlers.ProvidedServiceHandlers
             newService.CreatedDate = DateTime.UtcNow;
             await _repositoryManager.ProvidedServiceRepository.CreateAsync(newService);
             await _unitOfWork.CommitAsync();
-            return _mapper.Map<CreateOneProvidedServiceCommandResult>(request);
+            return _mapper.Map<CreateOneProvidedServiceCommandResult>(newService);
 
         }
     }

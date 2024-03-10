@@ -9,7 +9,7 @@ namespace Application.Utilities.AutoMapper
     {
         public ProvidedServiceProfile()
         {
-            CreateMap<ProvidedService,CreateOneProvidedServiceCommand>().ReverseMap();
+            CreateMap<ProvidedService, CreateOneProvidedServiceCommand>().ReverseMap();
             CreateMap<ProvidedService,CreateOneProvidedServiceCommandResult>().ReverseMap();
             CreateMap<ProvidedService,UpdateOneProvidedServiceCommand>().ReverseMap();
             CreateMap<ProvidedService,UpdateOneProvidedServiceCommandResult>().ReverseMap();
