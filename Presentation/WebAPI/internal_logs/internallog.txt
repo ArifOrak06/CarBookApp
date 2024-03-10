@@ -282,3 +282,11 @@
 2024-03-02 14:54:19.6248 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
 2024-03-02 14:54:19.6248 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\o1tak\source\repos\CarBookApp\Presentation\WebAPI\nlog.config
 2024-03-02 14:54:19.6248 Info Configuration initialized.
+2024-03-03 17:13:16.1310 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-03 17:13:16.1817 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-03 17:13:16.1817 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\o1tak\source\repos\CarBookApp\Presentation\WebAPI\nlog.config
+2024-03-03 17:13:16.1817 Info Configuration initialized.
+2024-03-07 23:17:35.0831 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2024-03-07 23:17:35.1294 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.8.2366. Product version: 5.2.8+f586f1341c46fa38aaaff4c641e7f0fa7e813943. GlobalAssemblyCache: False
+2024-03-07 23:17:35.1294 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\o1tak\source\repos\CarBookApp\Presentation\WebAPI\nlog.config
+2024-03-07 23:17:35.1417 Info Configuration initialized.

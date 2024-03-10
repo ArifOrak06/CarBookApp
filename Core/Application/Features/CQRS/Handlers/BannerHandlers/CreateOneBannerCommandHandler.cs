@@ -27,6 +27,9 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
             if (createOneBannerCommand == null)
                 throw new BannerObjectNullBadRequestException();
             var newBanner = _mapper.Map<Banner>(createOneBannerCommand);
+            newBanner.CreatedDate = DateTime.UtcNow;
+            newBanner.IsActive = true;
+            newBanner.IsDeleted = false;
             var result = await _repositoryManager.BannerRepository.CreateAsync(newBanner);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<CreateOneBannerCommandResult>(newBanner);

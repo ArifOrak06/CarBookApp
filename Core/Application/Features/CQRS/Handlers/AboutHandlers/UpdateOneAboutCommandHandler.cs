@@ -30,6 +30,9 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
 
             result.Title = updateOneAboutCommand.Title;
             result.Description = updateOneAboutCommand.Description;
+            result.IsActive = updateOneAboutCommand.IsActive;
+            result.ModifiedDate = DateTime.UtcNow;
+            if (updateOneAboutCommand.IsActive) result.IsDeleted = false; else result.IsDeleted = true;
             if(updateOneAboutCommand.ImageUrl != null)
                 result.ImageUrl = updateOneAboutCommand.ImageUrl;
             await _unitOfWork.CommitAsync();

@@ -29,6 +29,11 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
                 throw new BrandObjectNullBadRequestException();
 
             var newEntity = _mapper.Map<Brand>(createOneBrandCommand);
+            newEntity.IsActive = true;
+            newEntity.IsDeleted = false;
+            newEntity.CreatedDate = DateTime.UtcNow;
+
+            
             await _repositoryManager.BrandRepository.CreateAsync(newEntity);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<GetOneBrandByIdQueryResult>(newEntity);

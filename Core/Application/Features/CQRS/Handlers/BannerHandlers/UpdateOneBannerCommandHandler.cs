@@ -28,8 +28,14 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
             var currentEntity = _repositoryManager.BannerRepository.GetByFilter(x => x.Id == updateOneBannerCommand.Id, true).SingleOrDefault();
             if (currentEntity == null)
                 throw new BannerNotFoundException(updateOneBannerCommand.Id);
-
-            _repositoryManager.BannerRepository.Update(_mapper.Map<Banner>(updateOneBannerCommand));
+            currentEntity.Description = updateOneBannerCommand.Description;
+            currentEntity.VideoDescription = updateOneBannerCommand.VideoDescription;
+            currentEntity.VideoUrl = updateOneBannerCommand.VideoUrl;
+            currentEntity.Title = updateOneBannerCommand.Title;
+           
+            currentEntity.IsActive = updateOneBannerCommand.IsActive;
+            if (updateOneBannerCommand.IsActive) currentEntity.IsDeleted = false; else currentEntity.IsDeleted = true;
+            currentEntity.ModifiedDate = DateTime.UtcNow;
             await _unitOfWork.CommitAsync();
             return _mapper.Map<UpdateOneBannerCommandResult>(currentEntity);
 

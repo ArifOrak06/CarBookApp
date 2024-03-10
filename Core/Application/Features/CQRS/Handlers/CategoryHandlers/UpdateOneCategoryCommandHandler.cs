@@ -28,7 +28,8 @@ namespace Application.Features.CQRS.Handlers.CategoryHandlers
                 throw new CategoryNotFoundException(updateOneCategoryCommand.Id);
             currentEntity.ModifiedDate = DateTime.UtcNow;
             currentEntity.IsActive = updateOneCategoryCommand.IsActive;
-            if (updateOneCategoryCommand.IsActive) currentEntity.IsDeleted = false;
+            if (updateOneCategoryCommand.IsActive) currentEntity.IsDeleted = false; else currentEntity.IsDeleted = true;
+
             currentEntity.Description = updateOneCategoryCommand.Description;
             await _unitOfWork.CommitAsync();
             return _mapper.Map<UpdateOneCategoryCommandResult>(currentEntity);

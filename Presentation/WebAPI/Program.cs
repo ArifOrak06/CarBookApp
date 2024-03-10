@@ -4,6 +4,8 @@ using NLog;
 using Application.Services.Logging;
 using WebAPI.Extensions;
 using Application.Features.CQRS.Handlers.BannerHandlers;
+using System.Reflection;
+using Domain.Entities;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -33,6 +35,8 @@ LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nl
 
 builder.Services.ConfigureAutoMapper();
 
+// MEdiaTr
+builder.Services.RegistrationOfMediaTR();
 
 var app = builder.Build();
 var logger = app.Services.GetRequiredService<ILoggerService>();
