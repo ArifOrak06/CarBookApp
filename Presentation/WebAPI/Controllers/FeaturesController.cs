@@ -3,6 +3,7 @@ using Application.Features.CQRS.Queries.FeatureQueries;
 using Domain.Exceptions.ExceptionsForFeature;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -28,6 +29,8 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(new GetAllFeaturesQuery());
             return StatusCode(200, result);
         }
+
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneFeature([FromBody]CreateOneFeatureCommand command)
         {
@@ -42,6 +45,7 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(command);
             return StatusCode(200, result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneFeature([FromRoute(Name="id")]int id, [FromBody] UpdateOneFeatureCommand command)
         {

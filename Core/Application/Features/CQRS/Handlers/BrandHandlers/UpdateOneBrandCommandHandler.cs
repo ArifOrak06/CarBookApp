@@ -22,8 +22,7 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
 
         public async Task<GetOneBrandByIdQueryResult> Handle(UpdateOneBrandCommand updateOneBrandCommand)
         {
-            if (updateOneBrandCommand is null)
-                throw new BrandObjectNullBadRequestException();
+          
             var unchangedEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(updateOneBrandCommand.Id),true).SingleOrDefault();
             if (unchangedEntity is null)
                 throw new BrandNotFoundException(updateOneBrandCommand.Id);

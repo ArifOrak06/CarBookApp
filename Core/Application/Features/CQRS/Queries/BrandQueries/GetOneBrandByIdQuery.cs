@@ -1,11 +1,13 @@
-﻿namespace Application.Features.CQRS.Queries.BrandQueries
+﻿using Application.ValidationRulesForQueriesAndCommands.ValidationRulesForQueries;
+
+namespace Application.Features.CQRS.Queries.BrandQueries
 {
-    public class GetOneBrandByIdQuery
+    public class GetOneBrandByIdQuery : QueryForManipulation
     {
-        public int Id { get; set; }
-        public GetOneBrandByIdQuery(int id)
+
+        public GetOneBrandByIdQuery(int id) : base(id)
         {
-            Id= id;
+            
         }
 
     }

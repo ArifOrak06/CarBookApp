@@ -24,8 +24,7 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
 
         public async Task<CreateOneBannerCommandResult> Handle(CreateOneBannerCommand createOneBannerCommand)
         {
-            if (createOneBannerCommand == null)
-                throw new BannerObjectNullBadRequestException();
+         
             var newBanner = _mapper.Map<Banner>(createOneBannerCommand);
             newBanner.CreatedDate = DateTime.UtcNow;
             newBanner.IsActive = true;

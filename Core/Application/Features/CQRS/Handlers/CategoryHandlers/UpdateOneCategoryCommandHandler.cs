@@ -21,8 +21,7 @@ namespace Application.Features.CQRS.Handlers.CategoryHandlers
 
         public async Task<UpdateOneCategoryCommandResult> Handle(UpdateOneCategoryCommand updateOneCategoryCommand)
         {
-            if (updateOneCategoryCommand == null)
-                throw new CategoryObjectNullBadRequestException();
+         
             var currentEntity = _repositoryManager.CategoryRepository.GetByFilter(x => x.Id.Equals(updateOneCategoryCommand.Id), true).SingleOrDefault();
             if (currentEntity == null)
                 throw new CategoryNotFoundException(updateOneCategoryCommand.Id);

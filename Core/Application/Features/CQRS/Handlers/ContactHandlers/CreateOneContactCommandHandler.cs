@@ -23,8 +23,7 @@ namespace Application.Features.CQRS.Handlers.ContactHandlers
 
         public async Task<CreateOneContactCommandResult> Handle(CreateOneContactCommand createOneContactCommand)
         {
-            if (createOneContactCommand == null)
-                throw new ContactObjectNullBadRequestException();
+    
             var newContact = _mapper.Map<Contact>(createOneContactCommand);
             newContact.CreatedDate = DateTime.UtcNow;   
             newContact.IsActive = true;

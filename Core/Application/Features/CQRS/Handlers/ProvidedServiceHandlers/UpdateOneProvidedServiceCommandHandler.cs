@@ -25,8 +25,7 @@ namespace Application.Features.CQRS.Handlers.ProvidedServiceHandlers
 
         public async Task<UpdateOneProvidedServiceCommandResult> Handle(UpdateOneProvidedServiceCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
-                throw new ProvidedServiceObjectNullBadRequestException();
+    
             ProvidedService? unchangedService = _repositoryManager.ProvidedServiceRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if(unchangedService is null)
                 throw new ProvidedServiceNotFoundException(request.Id);

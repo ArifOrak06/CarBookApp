@@ -25,8 +25,7 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
 
         public async Task<GetOneBrandByIdQueryResult> Handle(CreateOneBrandCommand createOneBrandCommand)
         {
-            if (createOneBrandCommand == null)
-                throw new BrandObjectNullBadRequestException();
+          
 
             var newEntity = _mapper.Map<Brand>(createOneBrandCommand);
             newEntity.IsActive = true;

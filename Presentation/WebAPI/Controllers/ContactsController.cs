@@ -3,6 +3,7 @@ using Application.Features.CQRS.Commands.ContactCommands;
 using Application.Features.CQRS.Handlers.ContactHandlers;
 using Application.Features.CQRS.Queries.ContactQueries;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -37,12 +38,14 @@ namespace WebAPI.Controllers
             var result = _getOneContactByIdQueryHandler.Handle(new GetOneContactByIdQuery(id));
             return Ok(result);  
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneContact([FromBody]CreateOneContactCommand command)
         {
             var result = await _createOneContactCommandHandler.Handle(command);
             return StatusCode(201, result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneContact([FromBody]UpdateOneContactCommand command)
         {

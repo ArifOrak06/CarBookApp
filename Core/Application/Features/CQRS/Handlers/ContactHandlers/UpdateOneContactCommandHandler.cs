@@ -22,12 +22,10 @@ namespace Application.Features.CQRS.Handlers.ContactHandlers
 
         public async Task<UpdateOneContactCommandResult> Handle(UpdateOneContactCommand updateOneContactCommand)
         {
-            if (updateOneContactCommand == null)
-                throw new ContactObjectNullBadRequestException();
+           
             var unchangedEntity = _repositoryManager.ContactRepository.GetByFilter(x => x.Id.Equals(updateOneContactCommand.Id), true).SingleOrDefault();
             if (unchangedEntity == null)
                 throw new ContactNotFoundException(updateOneContactCommand.Id);
-            unchangedEntity.SendDate = updateOneContactCommand.SendDate;
             unchangedEntity.ModifiedDate = DateTime.UtcNow;
             unchangedEntity.IsDeleted = updateOneContactCommand.IsDeleted;
             unchangedEntity.IsActive = updateOneContactCommand.IsActive;

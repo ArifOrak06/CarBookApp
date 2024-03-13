@@ -23,8 +23,7 @@ namespace Application.Features.CQRS.Handlers.SocialMediaHandlers
 
         public async Task<UpdateOneSocialMediaCommandResult> Handle(UpdateOneSocialMediaCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
-                throw new SocialMediaObjectNullBadRequestException();
+           
             var unchangedEntity = _repositoryManager.SocialMediaRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (unchangedEntity == null)
                 throw new SocialMediaNotFoundException(request.Id);

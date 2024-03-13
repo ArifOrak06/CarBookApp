@@ -23,8 +23,7 @@ namespace Application.Features.CQRS.Handlers.FeatureHandlers
 
         public async Task<UpdateOneFeatureCommandResult> Handle(UpdateOneFeatureCommand request, CancellationToken cancellationToken)
         {
-            if (request is null)
-                throw new FeatureObjectNullBadRequestException();
+            
             var currentEntity = _repositoryManager.FeatureRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (currentEntity is null)
                 throw new FeatureNotFoundException(request.Id);

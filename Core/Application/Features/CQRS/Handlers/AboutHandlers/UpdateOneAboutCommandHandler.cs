@@ -22,8 +22,7 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
 
         public async Task<UpdateOneAboutCommandResult> Handle(UpdateOneAboutCommand updateOneAboutCommand)
         {
-            if (updateOneAboutCommand == null)
-                throw new AboutObjextNullBadRequestException();
+           
             var result = _repositoryManager.AboutRepository.GetByFilter(x => x.Id.Equals(updateOneAboutCommand.Id),true).SingleOrDefault();
             if (result is null)
                 throw new AboutNotFoundException(updateOneAboutCommand.Id);

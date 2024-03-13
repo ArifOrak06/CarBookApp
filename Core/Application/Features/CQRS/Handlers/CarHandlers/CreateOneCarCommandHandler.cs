@@ -23,9 +23,11 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
 
         public async Task<CreateOneCarCommandResult> Handle(CreateOneCarCommand createOneCarCommand)
         {
-            if (createOneCarCommand == null)
-                throw new CarObjectNullBadRequestException();
+   
             var newCar = _mapper.Map<Car>(createOneCarCommand);
+            newCar.CreatedDate = DateTime.UtcNow;
+            newCar.IsActive = true;
+            newCar.IsDeleted = false;
             await _repositoryManger.CarRepository.CreateAsync(newCar);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<CreateOneCarCommandResult>(newCar);

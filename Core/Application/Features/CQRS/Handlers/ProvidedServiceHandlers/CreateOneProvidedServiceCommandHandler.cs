@@ -24,8 +24,7 @@ namespace Application.Features.CQRS.Handlers.ProvidedServiceHandlers
 
         public async Task<CreateOneProvidedServiceCommandResult> Handle(CreateOneProvidedServiceCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
-                throw new ProvidedServiceObjectNullBadRequestException();
+           
 
             var newService = _mapper.Map<ProvidedService>(request);
             newService.IsActive = true;

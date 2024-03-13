@@ -1,12 +1,10 @@
 ﻿using Application.Features.CQRS.Results.SocialMediaResults;
+using Application.ValidationRulesForQueriesAndCommands.ValidationRulesForCommands.ValidationRulesForSocialMediaCommands;
 using MediatR;
 
 namespace Application.Features.CQRS.Commands.SocialMediaCommands
 {
-    public class CreateOneSocialMediaCommand : IRequest<CreateOneSocialMediaCommandResult>
+    public class CreateOneSocialMediaCommand : SocialMediaCommandForManipulation,IRequest<CreateOneSocialMediaCommandResult>
     {
-        public string Name { get; set; }
-        public string Url { get; set; }
-        public string Icon { get; set; }
     }
 }

@@ -24,8 +24,7 @@ namespace Application.Features.CQRS.Handlers.SocialMediaHandlers
 
         public async Task<CreateOneSocialMediaCommandResult> Handle(CreateOneSocialMediaCommand request, CancellationToken cancellationToken)
         {
-            if (request is null)
-                throw new SocialMediaObjectNullBadRequestException();
+            
             var newMedia = _mapper.Map<SocialMedia>(request);
             newMedia.CreatedDate = DateTime.UtcNow;
             newMedia.IsDeleted = false;

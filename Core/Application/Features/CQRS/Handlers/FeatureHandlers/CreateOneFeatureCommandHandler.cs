@@ -24,8 +24,7 @@ namespace Application.Features.CQRS.Handlers.FeatureHandlers
 
         public async Task<CreateOneFeatureCommandResult> Handle(CreateOneFeatureCommand request, CancellationToken cancellationToken)
         {
-            if (request is null)
-                throw new FeatureObjectNullBadRequestException();
+           
             var newEntity = _mapper.Map<Feature>(request);
             newEntity.CreatedDate = DateTime.UtcNow;
             newEntity.IsDeleted = false;

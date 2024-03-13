@@ -1,11 +1,11 @@
-using WebAPI.Extensions.Microsoft;
-using Persistence.Extensions.Microsoft;
-using NLog;
-using Application.Services.Logging;
-using WebAPI.Extensions;
 using Application.Features.CQRS.Handlers.BannerHandlers;
-using System.Reflection;
-using Domain.Entities;
+using Application.Services.Logging;
+using Microsoft.AspNetCore.Mvc;
+using NLog;
+using Persistence.Extensions.Microsoft;
+using WebAPI.ActionFilters;
+using WebAPI.Extensions;
+using WebAPI.Extensions.Microsoft;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,8 +22,15 @@ builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.ConfigurePersistenceDependencies();
 
+builder.Services.Configure<ApiBehaviorOptions>(options => {
+
+    options.SuppressModelStateInvalidFilter = true;
+});
+
 // CQRS registration to IoC  (Commands & Queries Handlers)
 builder.Services.AddCQRSServices();
+// ValidationFilterAttribute
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 builder.Services.AddScoped<GetAllBannersQueryHandler>();
 

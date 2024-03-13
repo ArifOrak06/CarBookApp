@@ -23,8 +23,7 @@ namespace Application.Features.CQRS.Handlers.PricingHandlers
 
         public async Task<UpdateOnePricingCommandResult> Handle(UpdateOnePricingCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
-                throw new PricingObjectNullBadRequestException();
+            
             var unchangedEntitiy = _repositoryManager.PricingRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (unchangedEntitiy == null)
                 throw new PricingNotFoundException(request.Id);

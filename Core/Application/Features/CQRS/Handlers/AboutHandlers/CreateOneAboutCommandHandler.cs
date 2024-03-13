@@ -19,8 +19,7 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
 
         public async Task<CreateOneAboutCommandResult> Handle(CreateOneAboutCommand createOneAboutCommand)
         {
-            if(createOneAboutCommand is null)
-                throw new AboutObjextNullBadRequestException();
+       
             var createdAbout = await _repositoryManager.AboutRepository.CreateAsync(new About
             {
                 Title = createOneAboutCommand.Title,
