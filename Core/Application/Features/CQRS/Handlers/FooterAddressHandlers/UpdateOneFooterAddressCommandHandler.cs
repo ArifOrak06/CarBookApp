@@ -23,8 +23,7 @@ namespace Application.Features.CQRS.Handlers.FooterAddressHandlers
 
         public async Task<UpdateOneFooterAddressCommandResult> Handle(UpdateOneFooterAddressCommand request, CancellationToken cancellationToken)
         {
-            if (request is null)
-                throw new FooterAddressObjectNullBadRequestException();
+          
             var unchangedEntity = _repositoryManager.FooterAdressRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (unchangedEntity == null)
                 throw new FooterAddressNotFoundException(request.Id);

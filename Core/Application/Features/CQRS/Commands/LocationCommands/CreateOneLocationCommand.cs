@@ -1,12 +1,11 @@
 ﻿using Application.Features.CQRS.Results.LocationResults;
+using Application.ValidationRulesForQueriesAndCommands.ValidationRulesForCommands.ValidationRulesForLocationCommands;
 using MediatR;
 
 namespace Application.Features.CQRS.Commands.LocationCommands
 {
-    public class CreateOneLocationCommand : IRequest<CreateOneLocationCommandResult>
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
+    public class CreateOneLocationCommand : LocationCommandForManipulation,IRequest<CreateOneLocationCommandResult>
+    {  
 
     }
 }

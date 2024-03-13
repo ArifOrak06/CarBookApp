@@ -1,7 +1,9 @@
-﻿namespace Application.Features.CQRS.Commands.CategoryCommands
+﻿using Application.ValidationRulesForQueriesAndCommands.ValidationRulesForCommands.ValidationRulesForCategoryCommands;
+
+namespace Application.Features.CQRS.Commands.CategoryCommands
 {
-    public class CreateOneCategoryCommand
+    public class CreateOneCategoryCommand : CategoryCommandForManipulation
     {
-        public string Description { get; set; }
+
     }
 }

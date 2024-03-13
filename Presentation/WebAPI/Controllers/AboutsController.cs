@@ -3,6 +3,7 @@ using Application.Features.CQRS.Commands.AboutCommands;
 using Application.Features.CQRS.Handlers.AboutHandlers;
 using Application.Features.CQRS.Queries.AboutQueries;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -36,7 +37,7 @@ namespace WebAPI.Controllers
             var result = _getOneAboutByIdQueryHandler.Handle(new GetOneAboutByIdQuery(id));
             return StatusCode(200, result);
         }
-
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> AddOneAbout(CreateOneAboutCommand command)
         {
@@ -49,6 +50,7 @@ namespace WebAPI.Controllers
             var result =  _removeOneAboutCommandHandler.Handle(command);
             return StatusCode(204, result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneAbout([FromRoute(Name="id")]int id,UpdateOneAboutCommand command)
         {

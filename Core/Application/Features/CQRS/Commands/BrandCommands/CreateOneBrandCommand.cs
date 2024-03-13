@@ -1,7 +1,9 @@
-﻿namespace Application.Features.CQRS.Commands.BrandCommands
+﻿using Application.ValidationRulesForQueriesAndCommands.ValidationRulesForCommands.ValidationRulesForBrandCommands;
+
+namespace Application.Features.CQRS.Commands.BrandCommands
 {
-    public class CreateOneBrandCommand
+    public class CreateOneBrandCommand : BrandCommandForManipulation
     {
-        public string Name { get; set; }
+        
     }
 }

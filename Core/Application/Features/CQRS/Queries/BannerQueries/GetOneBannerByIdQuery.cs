@@ -1,9 +1,10 @@
-﻿namespace Application.Features.CQRS.Queries.BannerQueries
+﻿using Application.ValidationRulesForQueriesAndCommands.ValidationRulesForQueries;
+
+namespace Application.Features.CQRS.Queries.BannerQueries
 {
-    public class GetOneBannerByIdQuery
+    public class GetOneBannerByIdQuery : QueryForManipulation
     {
-        public int Id { get; set; }
-        public GetOneBannerByIdQuery(int id)
+        public GetOneBannerByIdQuery(int id) : base(id)
         {
             Id = id;
         }

@@ -3,6 +3,7 @@ using Application.Features.CQRS.Handlers.CategoryHandlers;
 using Application.Features.CQRS.Queries.CategoryQueries;
 using Domain.Exceptions.ExceptionsForCategory;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -37,12 +38,14 @@ namespace WebAPI.Controllers
             var result = _getOneCategoryByIdQueryHandler.Handle(new GetOneCategoryByIdQuery(id));
             return StatusCode(200, result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneCategory([FromBody]CreateOneCategoryCommand createOneCategoryCommand)
         {
             var result = await _createOneCategoryCommandHandler.Handle(createOneCategoryCommand);
             return StatusCode(201, result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneCategory([FromRoute(Name="id")]int id, UpdateOneCategoryCommand updateOneCategoryCommand)
         {

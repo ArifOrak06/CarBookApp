@@ -3,6 +3,7 @@ using Application.Features.CQRS.Handlers.CarHandlers;
 using Application.Features.CQRS.Queries.CarQueries;
 using Domain.Exceptions.ExceptionsForCar;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -31,9 +32,9 @@ namespace WebAPI.Controllers
 
 
         [HttpGet("{id:int}")]
-        public IActionResult GetOneCar([FromRoute(Name = "id")] int id, GetOneCarByIdQuery query)
+        public IActionResult GetOneCar([FromRoute(Name = "id")] int id)
         {
-            var result = _getOneCarByIdQueryHandler.Handle(query);
+            var result = _getOneCarByIdQueryHandler.Handle(new GetOneCarByIdQuery(id));
             return StatusCode(200, result);
         }
         [HttpGet]
@@ -42,6 +43,7 @@ namespace WebAPI.Controllers
             var result = await _getAllCarsQueryHandler.Handle();
             return StatusCode(200, result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneCar(CreateOneCarCommand command)
         {
@@ -57,6 +59,7 @@ namespace WebAPI.Controllers
             var result = await _removeOneCarCommandHandler.Handle(command);
             return StatusCode(204, result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneCar([FromRoute(Name = "id")] int id, UpdateOneCarCommand command)
         {

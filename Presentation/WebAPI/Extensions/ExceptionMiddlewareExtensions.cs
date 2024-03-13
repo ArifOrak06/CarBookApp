@@ -22,7 +22,7 @@ namespace WebAPI.Extensions
                         context.Response.StatusCode = contextFeature.Error switch
                         {
                             NotFoundException => StatusCodes.Status404NotFound,
-                            BadRequestException => StatusCodes.Status500InternalServerError,
+                            BadRequestException => StatusCodes.Status400BadRequest,
                             _ => StatusCodes.Status500InternalServerError
                         };
 

@@ -23,8 +23,7 @@ namespace Application.Features.CQRS.Handlers.CategoryHandlers
 
         public async Task<CreateOneCategoryCommandResult> Handle(CreateOneCategoryCommand createOneCategoryCommand)
         {
-            if (createOneCategoryCommand == null)
-                throw new CategoryObjectNullBadRequestException();
+           
             var newCategory = _mapper.Map<Category>(createOneCategoryCommand);
             newCategory.CreatedDate = DateTime.UtcNow;
             newCategory.IsActive = true;

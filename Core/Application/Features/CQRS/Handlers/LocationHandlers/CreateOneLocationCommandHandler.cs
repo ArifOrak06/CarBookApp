@@ -24,8 +24,7 @@ namespace Application.Features.CQRS.Handlers.LocationHandlers
 
         public async Task<CreateOneLocationCommandResult> Handle(CreateOneLocationCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
-                throw new LocationObjectNullBadRequestException();
+          
             var newLocation = _mapper.Map<Location>(request);
             newLocation.CreatedDate = DateTime.UtcNow;
             newLocation.IsActive = true;

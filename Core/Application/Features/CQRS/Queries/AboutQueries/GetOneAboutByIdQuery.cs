@@ -1,11 +1,18 @@
-﻿namespace Application.Features.CQRS.Queries.AboutQueries
+﻿using Application.ValidationRulesForQueriesAndCommands.ValidationRulesForQueries;
+
+namespace Application.Features.CQRS.Queries.AboutQueries
 {
-    public class GetOneAboutByIdQuery
+    public class GetOneAboutByIdQuery  : QueryForManipulation
     {
-        public int Id { get; set; }
-        public GetOneAboutByIdQuery(int id)
+        //public int Id { get; set; }
+        //public GetOneAboutByIdQuery(int id)
+        //{
+        //    Id = id;
+        //}
+        public GetOneAboutByIdQuery(int id) : base(id)
         {
-            Id = id;
+            
         }
+
     }
 }

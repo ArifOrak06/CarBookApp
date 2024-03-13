@@ -24,8 +24,7 @@ namespace Application.Features.CQRS.Handlers.FooterAddressHandlers
 
         public async Task<CreateOneFooterAddressCommandResult> Handle(CreateOneFooterAddressCommand request, CancellationToken cancellationToken)
         {
-            if(request == null) 
-                throw new FooterAddressObjectNullBadRequestException();
+         
             var newFooter = _mapper.Map<FooterAddress>(request);
             newFooter.CreatedDate = DateTime.UtcNow;
             newFooter.IsActive = true;

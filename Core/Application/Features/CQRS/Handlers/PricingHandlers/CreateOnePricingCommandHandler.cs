@@ -24,8 +24,7 @@ namespace Application.Features.CQRS.Handlers.PricingHandlers
 
         public async Task<CreateOnePricingCommandResult> Handle(CreateOnePricingCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
-                throw new PricingObjectNullBadRequestException();
+         
             var newPricing =  _mapper.Map<Pricing>(request);
             newPricing.IsActive = true;
             newPricing.IsDeleted = false;

@@ -4,6 +4,7 @@ using Domain.Exceptions.ExceptionsForProvidedService;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -30,12 +31,15 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(new GetAllProvidedServicesQuery());   
             return Ok(result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneProvidedService([FromBody]CreateOneProvidedServiceCommand command)
         {
             var result = await _mediator.Send(command);
             return StatusCode(201, result); 
         }
+
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneProvidedService([FromRoute(Name="id")]int id, [FromBody]UpdateOneProvidedServiceCommand command)
         {

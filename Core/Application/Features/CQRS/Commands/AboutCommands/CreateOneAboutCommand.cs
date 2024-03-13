@@ -1,9 +1,9 @@
-﻿namespace Application.Features.CQRS.Commands
+﻿using Application.ValidationRulesForQueriesAndCommands.ValidationRulesForCommands.ValidationRulesForAboutCommands;
+
+namespace Application.Features.CQRS.Commands
 {
-    public class CreateOneAboutCommand
+    public class CreateOneAboutCommand : AboutCommandForManipulation
     {
-        public string Title { get; set; } 
-        public string Description { get; set; }
-        public string ImageUrl { get; set; }
+  
     }
 }

@@ -4,6 +4,7 @@ using Domain.Exceptions.ExceptionsForLocation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -31,12 +32,16 @@ namespace WebAPI.Controllers
             return Ok(result);
 
         }
+
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneLocation([FromBody] CreateOneLocationCommand command)
         {
             var result = await _mediator.Send(command);
             return StatusCode(201, result);
         }
+
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneLocation([FromRoute(Name="id")]int id, [FromBody]UpdateOneLocationCommand command)
         {

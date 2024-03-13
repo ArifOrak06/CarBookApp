@@ -2,6 +2,7 @@
 using Application.Features.CQRS.Handlers.BrandHandlers;
 using Application.Features.CQRS.Queries.BrandQueries;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -38,12 +39,14 @@ namespace WebAPI.Controllers
             var result = await _getAllBrandsQueryHandler.Handle();
             return StatusCode(200,result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneBrand([FromBody]CreateOneBrandCommand command)
         {
             var result = await _createOneBrandCommandHandler.Handle(command);
             return StatusCode(201,result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneBrand([FromRoute(Name="id")]int id,UpdateOneBrandCommand command)
         {

@@ -3,6 +3,7 @@ using Application.Features.CQRS.Queries.FooterAddressQueries;
 using Domain.Exceptions.ExceptionsForFooterAddress;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -29,12 +30,14 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(new GetAllFooterAddressQuery());
             return Ok(result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneFooterAddress([FromBody]CreateOneFooterAddressCommand command)
         {
             var result = await _mediator.Send(command);
             return StatusCode(201, result);
         }
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneFooterAddress([FromRoute(Name="id")]int id, UpdateOneFooterAddressCommand command)
         {

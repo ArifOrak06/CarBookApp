@@ -3,6 +3,7 @@ using Application.Features.CQRS.Queries.PricingQueries;
 using Domain.Exceptions.ExceptionsForPricing;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
 {
@@ -29,12 +30,16 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(new GetAllPricingsQuery());
             return Ok(result);
         }
+
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOnePricing([FromBody]CreateOnePricingCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOnePricing([FromRoute(Name="id")]int id,UpdateOnePricingCommand command)
         {

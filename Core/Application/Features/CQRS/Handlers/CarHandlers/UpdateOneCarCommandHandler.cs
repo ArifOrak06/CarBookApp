@@ -23,8 +23,7 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
 
         public async Task<UpdateOneCarCommandResult> Handle(UpdateOneCarCommand updateOneCarCommand)
         {
-            if (updateOneCarCommand == null)
-                throw new CarObjectNullBadRequestException();
+   
             var unchangedEntity = _repositoryManager.CarRepository.GetByFilter(x => x.Id.Equals(updateOneCarCommand.Id), true).SingleOrDefault();
             if (unchangedEntity == null)
                 throw new CarNotFoundException(updateOneCarCommand.Id);

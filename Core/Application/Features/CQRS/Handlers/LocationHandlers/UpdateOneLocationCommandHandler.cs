@@ -23,8 +23,7 @@ namespace Application.Features.CQRS.Handlers.LocationHandlers
 
         public async Task<UpdateOneLocationCommandResult> Handle(UpdateOneLocationCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
-                throw new LocationObjectNullBadRequestException();
+       
             var unchangedLocation = _repositoryManager.LocationRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if(unchangedLocation == null)
                 throw new LocationNotFoundException(request.Id);
