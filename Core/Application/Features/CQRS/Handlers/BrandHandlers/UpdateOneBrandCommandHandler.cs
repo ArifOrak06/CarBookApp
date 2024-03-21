@@ -3,11 +3,13 @@ using Application.Features.CQRS.Results.BrandResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
+using Domain.Entities.RequestFeatures;
 using Domain.Exceptions.ExceptionsForBrand;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.BrandHandlers
 {
-    public class UpdateOneBrandCommandHandler
+    public class UpdateOneBrandCommandHandler : IRequestHandler<UpdateOneBrandCommand,UpdateOneBrandCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -20,20 +22,19 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
             _mapper = mapper;
         }
 
-        public async Task<GetOneBrandByIdQueryResult> Handle(UpdateOneBrandCommand updateOneBrandCommand)
+        public async Task<UpdateOneBrandCommandResult> Handle(UpdateOneBrandCommand request, CancellationToken cancellationToken)
         {
-          
-            var unchangedEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(updateOneBrandCommand.Id),true).SingleOrDefault();
+            var unchangedEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (unchangedEntity is null)
-                throw new BrandNotFoundException(updateOneBrandCommand.Id);
-            unchangedEntity.Id = updateOneBrandCommand.Id;
-            unchangedEntity.Name = updateOneBrandCommand.Name;
+                throw new BrandNotFoundException(request.Id);
+         
+            unchangedEntity.Name = request.Name;
             unchangedEntity.ModifiedDate = DateTime.UtcNow;
-            unchangedEntity.IsActive = updateOneBrandCommand.IsActive;
-            if (updateOneBrandCommand.IsActive) unchangedEntity.IsDeleted = false; else unchangedEntity.IsDeleted = true;
+            unchangedEntity.IsActive = request.IsActive;
+            if (request.IsActive) unchangedEntity.IsDeleted = false; else unchangedEntity.IsDeleted = true;
 
             await _unitOfWork.CommitAsync();
-            return _mapper.Map<GetOneBrandByIdQueryResult>(unchangedEntity);
+            return _mapper.Map<UpdateOneBrandCommandResult>(unchangedEntity);
         }
     }
 }

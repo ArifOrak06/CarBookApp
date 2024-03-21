@@ -4,11 +4,11 @@ using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Exceptions.ExceptionsForBanner;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
-    public class CreateOneBannerCommandHandler 
+    public class CreateOneBannerCommandHandler  : IRequestHandler<CreateOneBannerCommand,CreateOneBannerCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -22,10 +22,9 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
             _repositoryManager = repositoryManager;
         }
 
-        public async Task<CreateOneBannerCommandResult> Handle(CreateOneBannerCommand createOneBannerCommand)
+        public async Task<CreateOneBannerCommandResult> Handle(CreateOneBannerCommand request, CancellationToken cancellationToken)
         {
-         
-            var newBanner = _mapper.Map<Banner>(createOneBannerCommand);
+            var newBanner = _mapper.Map<Banner>(request);
             newBanner.CreatedDate = DateTime.UtcNow;
             newBanner.IsActive = true;
             newBanner.IsDeleted = false;

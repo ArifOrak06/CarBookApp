@@ -2,42 +2,38 @@
 using Application.Features.CQRS.Results.AboutResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
+using AutoMapper;
 using Domain.Entities;
-using Domain.Exceptions;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.AboutHandlers
 {
-    public class CreateOneAboutCommandHandler
+    public class CreateOneAboutCommandHandler : IRequestHandler<CreateOneAboutCommand,CreateOneAboutCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateOneAboutCommandHandler(IRepositoryManager repositoryManager)
+        public CreateOneAboutCommandHandler(IRepositoryManager repositoryManager, IMapper mapper, IUnitOfWork unitOfWork)
         {
             _repositoryManager = repositoryManager;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<CreateOneAboutCommandResult> Handle(CreateOneAboutCommand createOneAboutCommand)
+
+
+        public async Task<CreateOneAboutCommandResult> Handle(CreateOneAboutCommand request, CancellationToken cancellationToken)
         {
-       
-            var createdAbout = await _repositoryManager.AboutRepository.CreateAsync(new About
-            {
-                Title = createOneAboutCommand.Title,
-                Description = createOneAboutCommand.Description,
-                ImageUrl = createOneAboutCommand.ImageUrl,
-                CreatedDate = DateTime.UtcNow,
-                IsActive = true,
-                IsDeleted = false
-            });
+
+            var newAbout = _mapper.Map<About>(request);
+            newAbout.CreatedDate = DateTime.UtcNow;
+            newAbout.IsActive = true;
+            newAbout.IsDeleted = false;
+            await _repositoryManager.AboutRepository.CreateAsync(newAbout);
             await _unitOfWork.CommitAsync();
 
-            return new CreateOneAboutCommandResult
-            {
-                Id = createdAbout.Id,
-                Title = createdAbout.Title,
-                
-            };
-            
+            return _mapper.Map<CreateOneAboutCommandResult>(newAbout);
 
         }
     }

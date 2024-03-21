@@ -1,6 +1,9 @@
-﻿namespace Application.Features.CQRS.Queries.CategoryQueries
+﻿using Application.Features.CQRS.Results.CategoryResults;
+using MediatR;
+
+namespace Application.Features.CQRS.Queries.CategoryQueries
 {
-    public class GetOneCategoryByIdQuery
+    public class GetOneCategoryByIdQuery : IRequest<GetOneCategoryByIdQueryResult>
     {
         public int Id { get; set; }
         public GetOneCategoryByIdQuery(int id)

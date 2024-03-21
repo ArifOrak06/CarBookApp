@@ -3,10 +3,11 @@ using Application.Features.CQRS.Results.CarResults;
 using Application.Repositories;
 using AutoMapper;
 using Domain.Exceptions.ExceptionsForCar;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.CarHandlers
 {
-    public class GetOneCarByIdWithBrandQueryHandler
+    public class GetOneCarByIdWithBrandQueryHandler : IRequestHandler<GetOneCarByIdWithBrandQuery,GetOneCarByIdWithBrandQueryResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -17,16 +18,15 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
             _mapper = mapper;
         }
 
-        public async Task<GetOneCarByIdWithBrandQueryResult> Handle(GetOneCarByIdQuery getOneCarByIdQuery)
+        public async Task<GetOneCarByIdWithBrandQueryResult> Handle(GetOneCarByIdWithBrandQuery request, CancellationToken cancellationToken)
         {
-            var currentEntity = await _repositoryManager.CarRepository.GetOneCarActiveAndNonDeletedByIdWithBrandAsync(getOneCarByIdQuery.Id, false);
+            var currentEntity = await _repositoryManager.CarRepository.GetOneCarActiveAndNonDeletedByIdWithBrandAsync(request.Id, false);
             if (currentEntity == null)
-                throw new CarNotFoundException(getOneCarByIdQuery.Id);
+                throw new CarNotFoundException(request.Id);
             //currentEntity.Brand = await _repositoryManager.BrandRepository.GetOneActiveAndNonDeletedBrandByIdWithCarsAsync(currentEntity.BrandId,false);
             var newCarWithBrandResult = _mapper.Map<GetOneCarByIdWithBrandQueryResult>(currentEntity);
             newCarWithBrandResult.BrandName = currentEntity.Brand.Name;
             return newCarWithBrandResult;
-
         }
     }
 }

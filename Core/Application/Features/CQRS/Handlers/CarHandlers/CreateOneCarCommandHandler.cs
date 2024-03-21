@@ -4,11 +4,11 @@ using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Exceptions.ExceptionsForCar;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.CarHandlers
 {
-    public class CreateOneCarCommandHandler
+    public class CreateOneCarCommandHandler : IRequestHandler<CreateOneCarCommand,CreateOneCarCommandResult>
     {
         private readonly IRepositoryManager _repositoryManger;
         private readonly IUnitOfWork _unitOfWork;
@@ -21,10 +21,10 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
             _repositoryManger = repositoryManger;
         }
 
-        public async Task<CreateOneCarCommandResult> Handle(CreateOneCarCommand createOneCarCommand)
+      
+        public async Task<CreateOneCarCommandResult> Handle(CreateOneCarCommand request, CancellationToken cancellationToken)
         {
-   
-            var newCar = _mapper.Map<Car>(createOneCarCommand);
+            var newCar = _mapper.Map<Car>(request);
             newCar.CreatedDate = DateTime.UtcNow;
             newCar.IsActive = true;
             newCar.IsDeleted = false;

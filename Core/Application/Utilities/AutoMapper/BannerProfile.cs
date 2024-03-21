@@ -13,6 +13,7 @@ namespace Application.Utilities.AutoMapper
             CreateMap<Banner, GetAllBannersQueryResult>().ReverseMap();
             CreateMap<Banner, CreateOneBannerCommandResult>().ReverseMap();
             CreateMap<Banner, CreateOneBannerCommand>().ReverseMap();
+            CreateMap<Banner, UpdateOneBannerCommand>().ReverseMap();
             CreateMap<Banner, UpdateOneBannerCommandResult>().ReverseMap();
 
         }

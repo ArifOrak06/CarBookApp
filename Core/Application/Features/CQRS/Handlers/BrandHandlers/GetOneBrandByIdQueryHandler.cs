@@ -3,10 +3,11 @@ using Application.Features.CQRS.Results.BrandResults;
 using Application.Repositories;
 using AutoMapper;
 using Domain.Exceptions.ExceptionsForBrand;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.BrandHandlers
 {
-    public class GetOneBrandByIdQueryHandler
+    public class GetOneBrandByIdQueryHandler : IRequestHandler<GetOneBrandByIdQuery,GetOneBrandByIdQueryResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -17,11 +18,11 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
             _mapper = mapper;
         }
 
-        public GetOneBrandByIdQueryResult Handle(GetOneBrandByIdQuery getOneBrandByIdQuery)
+        public async Task<GetOneBrandByIdQueryResult> Handle(GetOneBrandByIdQuery request, CancellationToken cancellationToken)
         {
-            var currentEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(getOneBrandByIdQuery.Id), false).SingleOrDefault();
+            var currentEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(request.Id), false).SingleOrDefault();
             if (currentEntity == null)
-                throw new BrandNotFoundException(getOneBrandByIdQuery.Id);
+                throw new BrandNotFoundException(request.Id);
             return _mapper.Map<GetOneBrandByIdQueryResult>(currentEntity);
         }
     }

@@ -1,10 +1,13 @@
-﻿using Application.Features.CQRS.Results.CarResults;
+﻿using Application.Features.CQRS.Queries.CarQueries;
+using Application.Features.CQRS.Results.CarResults;
 using Application.Repositories;
 using AutoMapper;
+using Domain.Entities.RequestFeatures;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.CarHandlers
 {
-    public class GetAllCarsWithBrandsQueryHandler
+    public class GetAllCarsWithBrandsQueryHandler : IRequestHandler<GetAllCarsWithBrandsQuery,(List<GetAllCarsWithBrandsQueryResult> result,MetaData metaData)>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -15,32 +18,21 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
             _mapper = mapper;
         }
 
-        public async Task<List<GetOneCarByIdWithBrandQueryResult>> Handle()
+        public async Task<(List<GetAllCarsWithBrandsQueryResult> result,MetaData metaData)> Handle(GetAllCarsWithBrandsQuery request, CancellationToken cancellationToken)
         {
-            var entities = await _repositoryManager.CarRepository.GetAllActivesAndNonDeletedCarsWithBrandAsync(false);
-            if (!entities.Any())
-                throw new Exception("Database'de kayıtlı bir araç bulunmaması nedeniyle listeleme başarısız olarak gerçekleşti.!");
+            var entities = await _repositoryManager.CarRepository.GetAllActivesAndNonDeletedCarsWithBrandAsync(false,request);
+            if (!entities.Any()) throw new Exception("Sistemde kayıtlı bir araç bulunmaması nedeniyle listeleme başarısız olarak gerçekleşti.!");
 
-
-            List<GetOneCarByIdWithBrandQueryResult>? newResultList =  entities.Select(x => new GetOneCarByIdWithBrandQueryResult
+            List<GetAllCarsWithBrandsQueryResult> carsWithBrandsResultList = new();
+            foreach (var entity in entities)
             {
-                BigImageUrl = x.BigImageUrl,
-                BrandId = x.BrandId,
-                BrandName = x.Brand.Name,
-                CoverImageUrl = x.CoverImageUrl,
-                Fuel = x.Fuel,
-                Id = x.Id,
-                Km = x.Km,
-                Luggage = x.Luggage,
-                Model = x.Model,
-                Seat = x.Seat,
-                Transmission = x.Transmission,
-
-            }).ToList();
-            return newResultList;
-            //var newCarWithBrands = _mapper.Map<List<GetOneCarByIdWithBrandQueryResult>>(entities);
-
-
+                var newResult = _mapper.Map<GetAllCarsWithBrandsQueryResult>(entity);
+                newResult.BrandName = entity.Brand.Name;
+                carsWithBrandsResultList.Add(newResult);
+            }
+            return (result: carsWithBrandsResultList, metaData: entities.MetaData);
         }
+
+        
     }
 }

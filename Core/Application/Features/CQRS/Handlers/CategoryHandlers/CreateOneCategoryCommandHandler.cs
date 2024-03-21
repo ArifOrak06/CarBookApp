@@ -4,11 +4,11 @@ using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Exceptions.ExceptionsForCategory;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.CategoryHandlers
 {
-    public class CreateOneCategoryCommandHandler
+    public class CreateOneCategoryCommandHandler : IRequestHandler<CreateOneCategoryCommand,CreateOneCategoryCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -21,17 +21,16 @@ namespace Application.Features.CQRS.Handlers.CategoryHandlers
             _mapper = mapper;
         }
 
-        public async Task<CreateOneCategoryCommandResult> Handle(CreateOneCategoryCommand createOneCategoryCommand)
+
+        public async Task<CreateOneCategoryCommandResult> Handle(CreateOneCategoryCommand request, CancellationToken cancellationToken)
         {
-           
-            var newCategory = _mapper.Map<Category>(createOneCategoryCommand);
+            var newCategory = _mapper.Map<Category>(request);
             newCategory.CreatedDate = DateTime.UtcNow;
             newCategory.IsActive = true;
             newCategory.IsDeleted = false;
             await _repositoryManager.CategoryRepository.CreateAsync(newCategory);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<CreateOneCategoryCommandResult>(newCategory);
-
 
         }
     }

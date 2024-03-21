@@ -1,8 +1,10 @@
 ﻿using Application.Features.CQRS.Commands.PricingCommands;
 using Application.Features.CQRS.Queries.PricingQueries;
+using Domain.Entities.RequestFeatures;
 using Domain.Exceptions.ExceptionsForPricing;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using WebAPI.ActionFilters;
 
 namespace WebAPI.Controllers
@@ -25,9 +27,10 @@ namespace WebAPI.Controllers
             return Ok(result);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllPricings()
+        public async Task<IActionResult> GetAllPricings([FromQuery]PricingRequestParameters pricingRequestParameters)
         {
-            var result = await _mediator.Send(new GetAllPricingsQuery());
+            var result = await _mediator.Send(new GetAllPricingsQuery(pricingRequestParameters.PageNumber,pricingRequestParameters.PageSize));
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(result.metaData));
             return Ok(result);
         }
 

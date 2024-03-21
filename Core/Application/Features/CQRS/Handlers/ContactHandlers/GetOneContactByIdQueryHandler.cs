@@ -3,10 +3,11 @@ using Application.Features.CQRS.Results.ContactResults;
 using Application.Repositories;
 using AutoMapper;
 using Domain.Exceptions.ExceptionsForContact;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.ContactHandlers
 {
-    public class GetOneContactByIdQueryHandler
+    public class GetOneContactByIdQueryHandler : IRequestHandler<GetOneContactByIdQuery,GetOneContactByIdQueryResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -17,11 +18,11 @@ namespace Application.Features.CQRS.Handlers.ContactHandlers
             _mapper = mapper;
         }
 
-        public GetOneContactByIdQueryResult Handle(GetOneContactByIdQuery getOneContactByIdQuery)
+        public async Task<GetOneContactByIdQueryResult> Handle(GetOneContactByIdQuery request, CancellationToken cancellationToken)
         {
-            var currentEntity = _repositoryManager.ContactRepository.GetByFilter(x => x.Id.Equals(getOneContactByIdQuery.Id), false).SingleOrDefault();
+            var currentEntity = _repositoryManager.ContactRepository.GetByFilter(x => x.Id.Equals(request.Id), false).SingleOrDefault();
             if (currentEntity == null)
-                throw new ContactNotFoundException(getOneContactByIdQuery.Id);
+                throw new ContactNotFoundException(request.Id);
             return _mapper.Map<GetOneContactByIdQueryResult>(currentEntity);
         }
     }

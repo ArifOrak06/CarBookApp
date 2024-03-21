@@ -1,7 +1,8 @@
 ﻿using Application.Features.CQRS.Commands.CategoryCommands;
-using Application.Features.CQRS.Handlers.CategoryHandlers;
 using Application.Features.CQRS.Queries.CategoryQueries;
+using Domain.Entities.RequestFeatures;
 using Domain.Exceptions.ExceptionsForCategory;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.ActionFilters;
 
@@ -11,38 +12,30 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly GetOneCategoryByIdQueryHandler _getOneCategoryByIdQueryHandler;
-        private readonly GetAllCategoriesQueryHandler _getAllCategoriesQueryHandler;
-        private readonly CreateOneCategoryCommandHandler _createOneCategoryCommandHandler;
-        private readonly UpdateOneCategoryCommandHandler _updateOneCategoryCommandHandler;
-        private readonly RemoveOneCategoryCommandHandler _removeOneCategoryCommandHandler;
+        private readonly IMediator _meditor;
 
-        public CategoriesController(GetOneCategoryByIdQueryHandler getOneCategoryByIdQueryHandler, GetAllCategoriesQueryHandler getAllCategoriesQueryHandler, CreateOneCategoryCommandHandler createOneCategoryCommandHandler, UpdateOneCategoryCommandHandler updateOneCategoryCommandHandler, RemoveOneCategoryCommandHandler removeOneCategoryCommandHandler)
+        public CategoriesController(IMediator meditor)
         {
-            _getOneCategoryByIdQueryHandler = getOneCategoryByIdQueryHandler;
-            _getAllCategoriesQueryHandler = getAllCategoriesQueryHandler;
-            _createOneCategoryCommandHandler = createOneCategoryCommandHandler;
-            _updateOneCategoryCommandHandler = updateOneCategoryCommandHandler;
-            _removeOneCategoryCommandHandler = removeOneCategoryCommandHandler;
+            _meditor = meditor;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetAllCategories([FromQuery]CategoryRequestParameters categoryRequestParameters)
         {
-            var result = await _getAllCategoriesQueryHandler.Handle();
+            var result = await _meditor.Send(new GetAllCategoriesQuery(categoryRequestParameters.PageNumber,categoryRequestParameters.PageSize));
             return StatusCode(200, result);
         }
         [HttpGet("{id:int}")]
         public IActionResult GetOneCategory([FromRoute(Name="id")]int id)
         {
-            var result = _getOneCategoryByIdQueryHandler.Handle(new GetOneCategoryByIdQuery(id));
+            var result = _meditor.Send(new GetOneCategoryByIdQuery(id));
             return StatusCode(200, result);
         }
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> CreateOneCategory([FromBody]CreateOneCategoryCommand createOneCategoryCommand)
         {
-            var result = await _createOneCategoryCommandHandler.Handle(createOneCategoryCommand);
+            var result = await _meditor.Send(createOneCategoryCommand);
             return StatusCode(201, result);
         }
         [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -51,14 +44,14 @@ namespace WebAPI.Controllers
         {
             if (id != updateOneCategoryCommand.Id)
                 throw new CategoryNotMatchedParametersBadRequestException(id);
-            var result = await _updateOneCategoryCommandHandler.Handle(updateOneCategoryCommand);
+            var result = await _meditor.Send(updateOneCategoryCommand);
             return StatusCode(201, result);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> RemoveOneCategory([FromRoute(Name="id")]int id)
         {
-            var result = await _removeOneCategoryCommandHandler.Handle(new RemoveOneCategoryCommand(id));
+            var result = await _meditor.Send(new RemoveOneCategoryCommand(id));
             return StatusCode(200, result);
         }
     }

@@ -4,10 +4,11 @@ using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
 using Domain.Exceptions.ExceptionsForCar;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.CarHandlers
 {
-    public class UpdateOneCarCommandHandler
+    public class UpdateOneCarCommandHandler : IRequestHandler<UpdateOneCarCommand,UpdateOneCarCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -21,28 +22,27 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
             _mapper = mapper;
         }
 
-        public async Task<UpdateOneCarCommandResult> Handle(UpdateOneCarCommand updateOneCarCommand)
+        public async Task<UpdateOneCarCommandResult> Handle(UpdateOneCarCommand request, CancellationToken cancellationToken)
         {
-   
-            var unchangedEntity = _repositoryManager.CarRepository.GetByFilter(x => x.Id.Equals(updateOneCarCommand.Id), true).SingleOrDefault();
+            var unchangedEntity = _repositoryManager.CarRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (unchangedEntity == null)
-                throw new CarNotFoundException(updateOneCarCommand.Id);
+                throw new CarNotFoundException(request.Id);
 
-            unchangedEntity.Transmission = updateOneCarCommand.Transmission;
-            unchangedEntity.Luggage = updateOneCarCommand.Luggage;
-            unchangedEntity.Fuel = updateOneCarCommand.Fuel;
-            unchangedEntity.BrandId = updateOneCarCommand.BrandId;
-            unchangedEntity.BigImageUrl = updateOneCarCommand.BigImageUrl;
-            unchangedEntity.CoverImageUrl = updateOneCarCommand.CoverImageUrl;
-            unchangedEntity.Km = updateOneCarCommand.Km;
-            unchangedEntity.Seat = updateOneCarCommand.Seat;
-            unchangedEntity.Model = updateOneCarCommand.Model;
-            unchangedEntity.IsActive = updateOneCarCommand.IsActive;
+            unchangedEntity.Transmission = request.Transmission;
+            unchangedEntity.Luggage = request.Luggage;
+            unchangedEntity.Fuel = request.Fuel;
+            unchangedEntity.BrandId = request.BrandId;
+            unchangedEntity.BigImageUrl = request.BigImageUrl;
+            unchangedEntity.CoverImageUrl = request.CoverImageUrl;
+            unchangedEntity.Km = request.Km;
+            unchangedEntity.Seat = request.Seat;
+            unchangedEntity.Model = request.Model;
+            unchangedEntity.IsActive = request.IsActive;
             unchangedEntity.ModifiedDate = DateTime.UtcNow;
-            if (updateOneCarCommand.IsActive) unchangedEntity.IsDeleted = false; else unchangedEntity.IsDeleted = true;
+            if (request.IsActive) unchangedEntity.IsDeleted = false; else unchangedEntity.IsDeleted = true;
 
             await _unitOfWork.CommitAsync();
-            return _mapper.Map<UpdateOneCarCommandResult>(unchangedEntity); 
+            return _mapper.Map<UpdateOneCarCommandResult>(unchangedEntity);
         }
     }
 }
