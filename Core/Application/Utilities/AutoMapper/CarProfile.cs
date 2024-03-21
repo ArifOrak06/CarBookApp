@@ -16,7 +16,7 @@ namespace Application.Utilities.AutoMapper
             CreateMap<Car,UpdateOneCarCommand>().ReverseMap();
             CreateMap<Car,UpdateOneCarCommandResult>().ReverseMap();
             CreateMap<Car,GetOneCarByIdWithBrandQueryResult>().ReverseMap();
-
+            CreateMap<Car,GetAllCarsWithBrandsQueryResult>().ReverseMap();
         }
     }
 }

@@ -2,12 +2,12 @@
 using Application.Features.CQRS.Results.AboutResults;
 using Application.Repositories;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Exceptions;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.AboutHandlers
 {
-    public class GetOneAboutByIdQueryHandler
+    public class GetOneAboutByIdQueryHandler : IRequestHandler<GetOneAboutByIdQuery,GetOneAboutByIdQueryResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -18,11 +18,13 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
             _mapper = mapper;
         }
 
-        public GetOneAboutByIdQueryResult Handle(GetOneAboutByIdQuery getOneAboutByIdQuery)
+      
+
+        public async Task<GetOneAboutByIdQueryResult> Handle(GetOneAboutByIdQuery request, CancellationToken cancellationToken)
         {
-            var newAbout = _repositoryManager.AboutRepository.GetByFilter(x => x.Id == getOneAboutByIdQuery.Id, false).SingleOrDefault();
+            var newAbout = _repositoryManager.AboutRepository.GetByFilter(x => x.Id == request.Id, false).SingleOrDefault();
             if (newAbout == null)
-                throw new AboutNotFoundException(getOneAboutByIdQuery.Id);
+                throw new AboutNotFoundException(request.Id);
 
             return _mapper.Map<GetOneAboutByIdQueryResult>(newAbout);
         }

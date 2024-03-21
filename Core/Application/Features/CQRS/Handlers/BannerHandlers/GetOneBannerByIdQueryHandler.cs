@@ -2,12 +2,12 @@
 using Application.Features.CQRS.Results.BannerResults;
 using Application.Repositories;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Exceptions.ExceptionsForBanner;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
-    public class GetOneBannerByIdQueryHandler
+    public class GetOneBannerByIdQueryHandler : IRequestHandler<GetOneBannerByIdQuery,GetOneBannerByIdQueryResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -17,20 +17,12 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
             _mapper = mapper;
         }
 
-        public GetOneBannerByIdQueryResult Handle(GetOneBannerByIdQuery query)
+        public async Task<GetOneBannerByIdQueryResult> Handle(GetOneBannerByIdQuery request, CancellationToken cancellationToken)
         {
-            var result = _repositoryManager.BannerRepository.GetByFilter(x => x.Id.Equals(query.Id), false).SingleOrDefault();
+            var result = _repositoryManager.BannerRepository.GetByFilter(x => x.Id.Equals(request.Id), false).SingleOrDefault();
             if (result is null)
-                throw new BannerNotFoundException(query.Id);
-            //return new GetOneBannerByIdQueryResult
-            //{
-            //    Description = result.Description,
-            //    Id = result.Id,
-            //    Title = result.Title,
-            //    VideoDescription = result.VideoDescription,
-            //    VideoUrl = result.VideoUrl
-
-            //};
+                throw new BannerNotFoundException(request.Id);
+         
             return _mapper.Map<GetOneBannerByIdQueryResult>(result);
         }
     }

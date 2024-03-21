@@ -2,12 +2,12 @@
 using Application.Features.CQRS.Results.CarResults;
 using Application.Repositories;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Exceptions.ExceptionsForCar;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.CarHandlers
 {
-    public class GetOneCarByIdQueryHandler
+    public class GetOneCarByIdQueryHandler : IRequestHandler<GetOneCarByIdQuery,GetOneCarByIdQueryResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -19,13 +19,12 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
             _mapper = mapper;
         }
 
-        public GetOneCarByIdQueryResult Handle(GetOneCarByIdQuery getOneCarByIdQuery)
+        public async Task<GetOneCarByIdQueryResult> Handle(GetOneCarByIdQuery request, CancellationToken cancellationToken)
         {
-            var currentEntity = _repositoryManager.CarRepository.GetByFilter(x => x.Id.Equals(getOneCarByIdQuery.Id), false).SingleOrDefault();
+            var currentEntity = _repositoryManager.CarRepository.GetByFilter(x => x.Id.Equals(request.Id), false).SingleOrDefault();
             if (currentEntity == null)
-                throw new CarNotFoundException(getOneCarByIdQuery.Id);
-            return _mapper.Map<GetOneCarByIdQueryResult>(currentEntity);    
-
+                throw new CarNotFoundException(request.Id);
+            return _mapper.Map<GetOneCarByIdQueryResult>(currentEntity);
         }
     }
 }

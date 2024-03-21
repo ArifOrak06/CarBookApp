@@ -1,10 +1,12 @@
-﻿using Application.Features.CQRS.Results.BannerResults;
+﻿using Application.Features.CQRS.Queries.BannerQueries;
+using Application.Features.CQRS.Results.BannerResults;
 using Application.Repositories;
 using AutoMapper;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
-    public class GetAllBannersQueryHandler
+    public class GetAllBannersQueryHandler : IRequestHandler<GetAllBannersQuery, List<GetAllBannersQueryResult>>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -15,7 +17,7 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
             _repositoryManager = repositoryManager;
         }
 
-        public async Task<List<GetAllBannersQueryResult>> Handle()
+        public async Task<List<GetAllBannersQueryResult>> Handle(GetAllBannersQuery request, CancellationToken cancellationToken)
         {
             var results = await _repositoryManager.BannerRepository.GetAllAsync(false);
             if (!results.Any())

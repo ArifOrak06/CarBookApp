@@ -1,8 +1,7 @@
 ﻿using Application.Features.CQRS.Commands.BannerCommands;
-using Application.Features.CQRS.Handlers.BannerHandlers;
 using Application.Features.CQRS.Queries.BannerQueries;
 using Domain.Exceptions.ExceptionsForBanner;
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -11,39 +10,31 @@ namespace WebAPI.Controllers
     [ApiController]
     public class BannersController : ControllerBase
     {
-        private readonly GetOneBannerByIdQueryHandler _getOneBannerByIdQueryHandler;
-        private readonly GetAllBannersQueryHandler _getAllBannersQueryHandler;
-        private readonly CreateOneBannerCommandHandler _createOneBannerCommandHandler;
-        private readonly UpdateOneBannerCommandHandler _updateOneBannerCommandHandler;
-        private readonly RemoveOneBannerCommandHandler _removeOneBannerCommandHandler;
+        private readonly IMediator _mediator;
 
-        public BannersController(GetOneBannerByIdQueryHandler getOneBannerByIdQueryHandler, GetAllBannersQueryHandler getAllBannersQueryHandler, CreateOneBannerCommandHandler createOneBannerCommandHandler, UpdateOneBannerCommandHandler updateOneBannerCommandHandler, RemoveOneBannerCommandHandler removeOneBannerCommandHandler)
+        public BannersController(IMediator mediator)
         {
-            _getOneBannerByIdQueryHandler = getOneBannerByIdQueryHandler;
-            _getAllBannersQueryHandler = getAllBannersQueryHandler;
-            _createOneBannerCommandHandler = createOneBannerCommandHandler;
-            _updateOneBannerCommandHandler = updateOneBannerCommandHandler;
-            _removeOneBannerCommandHandler = removeOneBannerCommandHandler;
+            _mediator = mediator;
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetOneBanner([FromRoute(Name = "id")] int id)
         {
-            var result = _getOneBannerByIdQueryHandler.Handle(new GetOneBannerByIdQuery(id));
+            var result = _mediator.Send(new GetOneBannerByIdQuery(id));
             return StatusCode(200, result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllBanners()
         {
-            var result = await _getAllBannersQueryHandler.Handle();
+            var result = await _mediator.Send(new GetAllBannersQuery());
             return StatusCode(200, result);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateOneBanner(CreateOneBannerCommand command)
         {
-            var result = await _createOneBannerCommandHandler.Handle(command);
+            var result = await _mediator.Send(command);
             return StatusCode(201, result);
         }
         [HttpPut("{id:int}")]
@@ -51,7 +42,7 @@ namespace WebAPI.Controllers
         {
             if (id != command.Id)
                 throw new BannerNotMatchedParametersBadRequestException(id);
-            var result = await _updateOneBannerCommandHandler.Handle(command);
+            var result = await _mediator.Send(command);
             return StatusCode(201, result);            
         }
         [HttpDelete("{id:int}")]
@@ -59,7 +50,7 @@ namespace WebAPI.Controllers
         {
             if (id != command.Id)
                 throw new BannerNotMatchedParametersBadRequestException(command.Id);
-            var result =  _removeOneBannerCommandHandler.Handle(command);
+            var result =  _mediator.Send(command);
             return StatusCode(204, result);
         }
 

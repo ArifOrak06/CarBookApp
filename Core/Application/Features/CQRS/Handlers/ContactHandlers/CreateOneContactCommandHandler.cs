@@ -4,11 +4,11 @@ using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
 using Domain.Entities;
-using Domain.Exceptions.ExceptionsForContact;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.ContactHandlers
 {
-    public class CreateOneContactCommandHandler
+    public class CreateOneContactCommandHandler : IRequestHandler<CreateOneContactCommand,CreateOneContactCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -21,11 +21,10 @@ namespace Application.Features.CQRS.Handlers.ContactHandlers
             _mapper = mapper;
         }
 
-        public async Task<CreateOneContactCommandResult> Handle(CreateOneContactCommand createOneContactCommand)
+        public async Task<CreateOneContactCommandResult> Handle(CreateOneContactCommand request, CancellationToken cancellationToken)
         {
-    
-            var newContact = _mapper.Map<Contact>(createOneContactCommand);
-            newContact.CreatedDate = DateTime.UtcNow;   
+            var newContact = _mapper.Map<Contact>(request);
+            newContact.CreatedDate = DateTime.UtcNow;
             newContact.IsActive = true;
             newContact.IsDeleted = false;
             await _repositoryManager.ContactRepository.CreateAsync(newContact);

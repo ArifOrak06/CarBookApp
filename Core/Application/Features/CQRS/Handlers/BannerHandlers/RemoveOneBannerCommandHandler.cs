@@ -1,12 +1,13 @@
 ﻿using Application.Features.CQRS.Commands.BannerCommands;
+using Application.Features.CQRS.Results.BannerResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
-using Domain.Entities;
 using Domain.Exceptions.ExceptionsForBanner;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.BannerHandlers
 {
-    public class RemoveOneBannerCommandHandler
+    public class RemoveOneBannerCommandHandler : IRequestHandler<RemoveOneBannerCommand,RemoveOneBannerCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -17,16 +18,14 @@ namespace Application.Features.CQRS.Handlers.BannerHandlers
             _unitOfWork = unitOfWork;
         }
 
-
-        public async Task Handle(RemoveOneBannerCommand removeOneBannerCommand)
+        public async Task<RemoveOneBannerCommandResult> Handle(RemoveOneBannerCommand request, CancellationToken cancellationToken)
         {
-            var currentEntity = _repositoryManager.BannerRepository.GetByFilter(x => x.Id == removeOneBannerCommand.Id, true).SingleOrDefault();
+            var currentEntity = _repositoryManager.BannerRepository.GetByFilter(x => x.Id == request.Id, true).SingleOrDefault();
             if (currentEntity != null)
-                throw new BannerNotFoundException(removeOneBannerCommand.Id);
+                throw new BannerNotFoundException(request.Id);
             _repositoryManager.BannerRepository.Delete(currentEntity);
             await _unitOfWork.CommitAsync();
-
-
+            return new RemoveOneBannerCommandResult(request.Id);
         }
     }
 }

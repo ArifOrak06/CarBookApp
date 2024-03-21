@@ -4,10 +4,11 @@ using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
 using Domain.Exceptions.ExceptionsForCategory;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.CategoryHandlers
 {
-    public class UpdateOneCategoryCommandHandler
+    public class UpdateOneCategoryCommandHandler : IRequestHandler<UpdateOneCategoryCommand,UpdateOneCategoryCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -19,21 +20,18 @@ namespace Application.Features.CQRS.Handlers.CategoryHandlers
             _mapper = mapper;
         }
 
-        public async Task<UpdateOneCategoryCommandResult> Handle(UpdateOneCategoryCommand updateOneCategoryCommand)
+        public async Task<UpdateOneCategoryCommandResult> Handle(UpdateOneCategoryCommand request, CancellationToken cancellationToken)
         {
-         
-            var currentEntity = _repositoryManager.CategoryRepository.GetByFilter(x => x.Id.Equals(updateOneCategoryCommand.Id), true).SingleOrDefault();
+            var currentEntity = _repositoryManager.CategoryRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (currentEntity == null)
-                throw new CategoryNotFoundException(updateOneCategoryCommand.Id);
+                throw new CategoryNotFoundException(request.Id);
             currentEntity.ModifiedDate = DateTime.UtcNow;
-            currentEntity.IsActive = updateOneCategoryCommand.IsActive;
-            if (updateOneCategoryCommand.IsActive) currentEntity.IsDeleted = false; else currentEntity.IsDeleted = true;
+            currentEntity.IsActive = request.IsActive;
+            if (request.IsActive) currentEntity.IsDeleted = false; else currentEntity.IsDeleted = true;
 
-            currentEntity.Description = updateOneCategoryCommand.Description;
+            currentEntity.Description = request.Description;
             await _unitOfWork.CommitAsync();
             return _mapper.Map<UpdateOneCategoryCommandResult>(currentEntity);
-            
         }
-
     }
 }

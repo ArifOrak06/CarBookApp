@@ -12,7 +12,9 @@ namespace Application.Utilities.AutoMapper
             CreateMap<Brand,GetOneBrandByIdQueryResult>().ReverseMap();
             CreateMap<Brand,GetAllBrandsQueryResult>().ReverseMap();
             CreateMap<Brand,CreateOneBrandCommand>().ReverseMap();
+            CreateMap<Brand,CreateOneBrandCommandResult>().ReverseMap();
             CreateMap<Brand,UpdateOneBrandCommand>().ReverseMap();
+            CreateMap<Brand,UpdateOneBrandCommandResult>().ReverseMap();
             CreateMap<Brand,GetOneBrandByIdWithCarsQueryResult>().ReverseMap();
         }
     }

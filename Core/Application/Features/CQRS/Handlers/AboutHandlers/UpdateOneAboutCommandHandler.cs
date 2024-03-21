@@ -4,10 +4,11 @@ using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
 using Domain.Exceptions;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.AboutHandlers
 {
-    public class UpdateOneAboutCommandHandler
+    public class UpdateOneAboutCommandHandler : IRequestHandler<UpdateOneAboutCommand,UpdateOneAboutCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -20,23 +21,21 @@ namespace Application.Features.CQRS.Handlers.AboutHandlers
             _mapper = mapper;
         }
 
-        public async Task<UpdateOneAboutCommandResult> Handle(UpdateOneAboutCommand updateOneAboutCommand)
+        public async Task<UpdateOneAboutCommandResult> Handle(UpdateOneAboutCommand request, CancellationToken cancellationToken)
         {
-           
-            var result = _repositoryManager.AboutRepository.GetByFilter(x => x.Id.Equals(updateOneAboutCommand.Id),true).SingleOrDefault();
+            var result = _repositoryManager.AboutRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (result is null)
-                throw new AboutNotFoundException(updateOneAboutCommand.Id);
+                throw new AboutNotFoundException(request.Id);
 
-            result.Title = updateOneAboutCommand.Title;
-            result.Description = updateOneAboutCommand.Description;
-            result.IsActive = updateOneAboutCommand.IsActive;
+            result.Title = request.Title;
+            result.Description = request.Description;
+            result.IsActive = request.IsActive;
             result.ModifiedDate = DateTime.UtcNow;
-            if (updateOneAboutCommand.IsActive) result.IsDeleted = false; else result.IsDeleted = true;
-            if(updateOneAboutCommand.ImageUrl != null)
-                result.ImageUrl = updateOneAboutCommand.ImageUrl;
+            if (request.IsActive) result.IsDeleted = false; else result.IsDeleted = true;
+            if (request.ImageUrl != null)
+                result.ImageUrl = request.ImageUrl;
             await _unitOfWork.CommitAsync();
             return _mapper.Map<UpdateOneAboutCommandResult>(result);
-
         }
     }
 }

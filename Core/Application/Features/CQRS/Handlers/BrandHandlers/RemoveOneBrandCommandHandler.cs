@@ -1,13 +1,14 @@
 ﻿using Application.Features.CQRS.Commands.BrandCommands;
+using Application.Features.CQRS.Results.BrandResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
 using AutoMapper;
-using Domain.Entities;
 using Domain.Exceptions.ExceptionsForBrand;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.BrandHandlers
 {
-    public class RemoveOneBrandCommandHandler
+    public class RemoveOneBrandCommandHandler : IRequestHandler<RemoveOneBrandCommand,RemoveOneBrandCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -20,18 +21,15 @@ namespace Application.Features.CQRS.Handlers.BrandHandlers
             _mapper = mapper;
         }
 
-        public async Task<int> Handle(RemoveOneBrandCommand removeOneBrandCommand)
+        public async Task<RemoveOneBrandCommandResult> Handle(RemoveOneBrandCommand request, CancellationToken cancellationToken)
         {
-            if (removeOneBrandCommand is null)
-                throw new BrandObjectNullBadRequestException();
-            var currentEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(removeOneBrandCommand.Id), true).SingleOrDefault();
+            var currentEntity = _repositoryManager.BrandRepository.GetByFilter(x => x.Id.Equals(request.Id), true).SingleOrDefault();
             if (currentEntity is null)
-                throw new BrandNotFoundException(removeOneBrandCommand.Id);
+                throw new BrandNotFoundException(request.Id);
 
             _repositoryManager.BrandRepository.Delete(currentEntity);
             await _unitOfWork.CommitAsync();
-            return removeOneBrandCommand.Id;
-
+            return new RemoveOneBrandCommandResult(request.Id);
         }
     }
 }

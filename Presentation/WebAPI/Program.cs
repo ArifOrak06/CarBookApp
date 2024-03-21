@@ -27,13 +27,12 @@ builder.Services.Configure<ApiBehaviorOptions>(options => {
     options.SuppressModelStateInvalidFilter = true;
 });
 
-// CQRS registration to IoC  (Commands & Queries Handlers)
-builder.Services.AddCQRSServices();
+
 // ValidationFilterAttribute
 builder.Services.AddScoped<ValidationFilterAttribute>();
 
 builder.Services.AddScoped<GetAllBannersQueryHandler>();
-
+builder.Services.ConfigureCors();
 // LoggerService : Nlog
 builder.Services.ConfigureLoggerService();
 LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
@@ -57,7 +56,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();

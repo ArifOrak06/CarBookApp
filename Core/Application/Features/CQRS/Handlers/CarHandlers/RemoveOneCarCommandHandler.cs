@@ -1,11 +1,13 @@
 ﻿using Application.Features.CQRS.Commands.CarCommands;
+using Application.Features.CQRS.Results.CarResults;
 using Application.Repositories;
 using Application.UnitOfWorks;
 using Domain.Exceptions.ExceptionsForCar;
+using MediatR;
 
 namespace Application.Features.CQRS.Handlers.CarHandlers
 {
-    public class RemoveOneCarCommandHandler
+    public class RemoveOneCarCommandHandler : IRequestHandler<RemoveOneCarCommand,RemoveOneCarCommandResult>
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -17,15 +19,15 @@ namespace Application.Features.CQRS.Handlers.CarHandlers
             _repositoryManager = repositoryManager;
             _unitOfWork = unitOfWork;
         }
-        
-        public async Task<int> Handle(RemoveOneCarCommand removeOneCarCommand)
+
+        public async  Task<RemoveOneCarCommandResult> Handle(RemoveOneCarCommand request, CancellationToken cancellationToken)
         {
-            var currentEntity = _repositoryManager.CarRepository.GetByFilter(x => x.Id == removeOneCarCommand.Id, true).SingleOrDefault();
-            if (currentEntity == null) 
-                throw new CarNotFoundException(removeOneCarCommand.Id);
+            var currentEntity = _repositoryManager.CarRepository.GetByFilter(x => x.Id == request.Id, true).SingleOrDefault();
+            if (currentEntity == null)
+                throw new CarNotFoundException(request.Id);
             _repositoryManager.CarRepository.Delete(currentEntity);
             await _unitOfWork.CommitAsync();
-            return removeOneCarCommand.Id;
+            return new RemoveOneCarCommandResult(request.Id);
         }
     }
 }

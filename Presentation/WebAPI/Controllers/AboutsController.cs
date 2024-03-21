@@ -2,6 +2,7 @@
 using Application.Features.CQRS.Commands.AboutCommands;
 using Application.Features.CQRS.Handlers.AboutHandlers;
 using Application.Features.CQRS.Queries.AboutQueries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.ActionFilters;
 namespace WebAPI.Controllers
@@ -10,51 +11,44 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AboutsController : ControllerBase
     {
-        private readonly CreateOneAboutCommandHandler _createOneAboutCommandHandler;
-        private readonly RemoveOneAboutCommandHandler _removeOneAboutCommandHandler;
-        private readonly UpdateOneAboutCommandHandler _updateOneAboutCommandHandler;
-        private readonly GetOneAboutByIdQueryHandler _getOneAboutByIdQueryHandler;
-        private readonly GetAllAboutsQueryHandler _getAllAboutsQueryHandler;
 
-        public AboutsController(CreateOneAboutCommandHandler createOneAboutCommandHandler, RemoveOneAboutCommandHandler removeOneAboutCommandHandler, UpdateOneAboutCommandHandler updateOneAboutCommandHandler, GetOneAboutByIdQueryHandler getOneAboutByIdQueryHandler, GetAllAboutsQueryHandler getAllAboutsQueryHandler)
+        private readonly IMediator _mediator;
+
+        public AboutsController(IMediator mediator)
         {
-            _createOneAboutCommandHandler = createOneAboutCommandHandler;
-            _removeOneAboutCommandHandler = removeOneAboutCommandHandler;
-            _updateOneAboutCommandHandler = updateOneAboutCommandHandler;
-            _getOneAboutByIdQueryHandler = getOneAboutByIdQueryHandler;
-            _getAllAboutsQueryHandler = getAllAboutsQueryHandler;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAbouts()
         {
-            var result = await _getAllAboutsQueryHandler.Handle();
+            var result = await _mediator.Send(new GetAllAboutsQuery());
             return StatusCode(200,result);
         }
         [HttpGet("{id:int}")]
-        public IActionResult GetOneAbout([FromRoute(Name ="id")]int id)
+        public async Task<IActionResult> GetOneAbout([FromRoute(Name ="id")]int id)
         {
-            var result = _getOneAboutByIdQueryHandler.Handle(new GetOneAboutByIdQuery(id));
+            var result = await _mediator.Send(new GetOneAboutByIdQuery(id));
             return StatusCode(200, result);
         }
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPost]
         public async Task<IActionResult> AddOneAbout(CreateOneAboutCommand command)
         {
-            var result = await _createOneAboutCommandHandler.Handle(command);
+            var result = await _mediator.Send(command);
             return StatusCode(200, result);
         }
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteOneAbout(RemoveOneAboutCommand command)
+        public async Task<IActionResult> DeleteOneAbout(RemoveOneAboutCommand command)
         {
-            var result =  _removeOneAboutCommandHandler.Handle(command);
+            var result =  await _mediator.Send(command);
             return StatusCode(204, result);
         }
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateOneAbout([FromRoute(Name="id")]int id,UpdateOneAboutCommand command)
         {
-            var result = await _updateOneAboutCommandHandler.Handle(command);
+            var result = await _mediator.Send(command);
             return StatusCode(200, result);
         }
     }
