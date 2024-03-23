@@ -1,0 +1,28 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  @* head alanı *@ 
+  @await Component.InvokeAsync("_HeadUILayoutComponent")
+  <body>
+    
+	 @await Component.InvokeAsync("_NavbarUILayoutComponent")
+    <!-- END nav -->
+    
+    <!-- Main Cover Img-->
+    @await Component.InvokeAsync("_MainCoverUILayoutComponent")
+
+    @RenderBody()
+
+
+    @await Component.InvokeAsync("_FooterUILayoutComponent")
+
+    @await Component.InvokeAsync("_ScriptUILayoutComponent")
+    
+  </body>
+</html>
+
